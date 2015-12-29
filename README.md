@@ -1,2 +1,3 @@
 # netty-light-api-server
-A light java api server build on netty
+如果你和我一样是一个两三年的后端开发，却是一个 java 新手，那么这个项目非常适合你来学习使用 java 构建后端服务。
+我希望通过该项目的构建重现我这一年 java 之旅，项目代码会从简单到复杂逐步构建，在适当的时机我会打上 tag，方便大家学习和阅读。
