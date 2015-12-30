@@ -1,4 +1,6 @@
-package net.mengkang.api;
+package net.mengkang.api.route;
+
+import io.netty.handler.codec.http.HttpMethod;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +32,5 @@ public class ApiProtocol {
 
     public Map<String, List<String>> parameters;
 
-    public String method = "get";
+    public HttpMethod method = HttpMethod.GET;
 }
