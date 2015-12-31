@@ -88,6 +88,7 @@ public class ApiProtocol {
 
     /**
      * 传输协议初始化
+     *
      * 使用 netty 的{@link QueryStringDecoder} 替换之前自己做的简单解析的方法
      * <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a> 更加全面安全可靠
      *
@@ -114,21 +115,19 @@ public class ApiProtocol {
 
         this.method = req.method();
 
-        if (req.method().equals(HttpMethod.POST) && req instanceof HttpContent) {
-            System.out.println("post请求");
+        if (this.parameters.size() == 0) {
+            return;
         }
-
-        decodeRequestParameters();
-    }
-
-    public ApiProtocol() {
+        getDataDecode();
+        postDataDecode(ctx,req);
     }
 
     /**
-     * 解析 queryString
+     * get 数据的属性的赋值
+     *
      * 优化笔记 <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
-    public void decodeRequestParameters() {
+    public void getDataDecode() {
         Field[] fields = this.getClass().getDeclaredFields();
 
         for (int i = 0, length = fields.length; i < length; i++) {
@@ -149,13 +148,13 @@ public class ApiProtocol {
             String fieldType = field.getType().getName();
             field.setAccessible(true);
             try {
-                if (fieldType.endsWith("Integer")) {
+                if (fieldType.endsWith("int")) {
                     field.set(this, Integer.parseInt(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("Float")) {
+                } else if (fieldType.endsWith("float")) {
                     field.set(this, Float.parseFloat(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("Long")) {
+                } else if (fieldType.endsWith("long")) {
                     field.set(this, Long.parseLong(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("Double")) {
+                } else if (fieldType.endsWith("double")) {
                     field.set(this, Double.parseDouble(this.parameters.get(filedName).get(0)));
                 } else {
                     field.set(this, this.parameters.get(filedName).get(0));
@@ -167,6 +166,12 @@ public class ApiProtocol {
             }
 
             this.parameters.remove(filedName);
+        }
+    }
+
+    public void postDataDecode(ChannelHandlerContext ctx, HttpRequest req){
+        if (req.method().equals(HttpMethod.POST) && req instanceof HttpContent) {
+            System.out.println("post请求");
         }
     }
 }
