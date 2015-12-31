@@ -7,8 +7,4 @@ import junit.framework.TestCase;
  */
 public class ApiProtocolTest extends TestCase {
 
-    public void testDecodeRequestParameters2() throws Exception {
-        ApiProtocol apiProtocol = new ApiProtocol();
-        apiProtocol.getDataDecode();
-    }
 }

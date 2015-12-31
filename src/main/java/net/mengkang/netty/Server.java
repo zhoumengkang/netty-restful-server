@@ -12,7 +12,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 public final class Server {
 
-    static final int PORT = 8083;
+    static final int PORT = 8080;
 
     public static void main(String[] args) throws Exception {
 

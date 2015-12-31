@@ -5,11 +5,18 @@ import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.multipart.MemoryAttribute;
+import io.netty.handler.codec.http.multipart.MixedAttribute;
+import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +38,8 @@ public class ApiProtocol {
     private int                       offset     = 0;
     private int                       limit      = 10;
     private HttpMethod                method     = HttpMethod.GET;
-    private Map<String, List<String>> parameters = null; // get 和 post 的键值对都存储在这里
-    public  byte[]                    postBody   = null; // post 请求时的非键值对内容
+    private Map<String, List<String>> parameters = new HashMap<String, List<String>>(); // get 和 post 的键值对都存储在这里
+    public  String                    postBody   = null; // post 请求时的非键值对内容
 
     public int getBuild() {
         return build;
@@ -82,7 +89,7 @@ public class ApiProtocol {
         return parameters;
     }
 
-    public byte[] getPostBody() {
+    public String getPostBody() {
         return postBody;
     }
 
@@ -101,7 +108,9 @@ public class ApiProtocol {
         logger.info(uri);
 
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
-        this.parameters = queryStringDecoder.parameters();
+        if (queryStringDecoder.parameters().size() > 0) {
+            this.parameters = queryStringDecoder.parameters();
+        }
 
         String clientIP = (String) req.headers().get("X-Forwarded-For");
         if (clientIP == null) {
@@ -115,19 +124,22 @@ public class ApiProtocol {
 
         this.method = req.method();
 
+        postDataDecode(req);
+
         if (this.parameters.size() == 0) {
             return;
         }
-        getDataDecode();
-        postDataDecode(ctx,req);
+
+        setFields();
+
     }
 
     /**
-     * get 数据的属性的赋值
+     * 协议属性赋值，存入 {@link #parameters}
      *
      * 优化笔记 <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
-    public void getDataDecode() {
+    public void setFields() {
         Field[] fields = this.getClass().getDeclaredFields();
 
         for (int i = 0, length = fields.length; i < length; i++) {
@@ -169,9 +181,27 @@ public class ApiProtocol {
         }
     }
 
-    public void postDataDecode(ChannelHandlerContext ctx, HttpRequest req){
-        if (req.method().equals(HttpMethod.POST) && req instanceof HttpContent) {
-            System.out.println("post请求");
+    /**
+     * 解析接收的 post 数据
+     *
+     * 键值对 a=b&c=d 存入 {@link #parameters}
+     * 纯 post body 的内容存入 {@link #postBody}
+     *
+     * @param req
+     */
+    public void postDataDecode(HttpRequest req){
+        if (req.method().equals(HttpMethod.POST)) {
+            HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
+            try{
+                List<InterfaceHttpData> postList = decoder.getBodyHttpDatas();
+                for (InterfaceHttpData data : postList) {
+                    List<String> values = new ArrayList<String>();
+                    values.add(((MixedAttribute) data).getValue());
+                    this.parameters.put(data.getName(),values);
+                }
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
         }
     }
 }
