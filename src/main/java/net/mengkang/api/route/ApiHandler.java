@@ -21,11 +21,11 @@ public class ApiHandler {
      * api 数据输出统一入口和出口
      *
      * @param ctx
-     * @param httpRequest
+     * @param msg
      * @return
      */
-    public static byte[] transfer(ChannelHandlerContext ctx, HttpRequest httpRequest) {
-        ApiProtocol apiProtocol = new ApiProtocol(ctx, httpRequest);
+    public static byte[] transfer(ChannelHandlerContext ctx, Object msg) {
+        ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
         if (apiProtocol.getApi() == null) {
             return decode(BaseApi.error(BaseApi.API_CAN_NOT_BE_NULL));

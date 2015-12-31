@@ -36,7 +36,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             }
             boolean keepAlive = HttpHeaderUtil.isKeepAlive(req);
 
-            FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(ApiHandler.transfer(ctx,req)));
+            FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(ApiHandler.transfer(ctx,msg)));
 
             response.headers().set(CONTENT_TYPE,new AsciiString("application/json; charset=utf-8"));
             response.headers().set(TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);

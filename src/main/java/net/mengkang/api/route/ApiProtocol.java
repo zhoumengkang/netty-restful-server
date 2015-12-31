@@ -1,10 +1,8 @@
 package net.mengkang.api.route;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.MemoryAttribute;
@@ -12,6 +10,7 @@ import io.netty.handler.codec.http.multipart.MixedAttribute;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.net.www.http.HttpClient;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
@@ -21,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 将 http 协议转换为自定义的协议
+ * convert the netty HttpRequest object to a api protocol object
+ *
  */
 public class ApiProtocol {
 
@@ -94,23 +94,14 @@ public class ApiProtocol {
     }
 
     /**
-     * 传输协议初始化
-     *
-     * 使用 netty 的{@link QueryStringDecoder} 替换之前自己做的简单解析的方法
-     * <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a> 更加全面安全可靠
+     * api protocol object initializer
      *
      * @param ctx
-     * @param req
+     * @param msg
      * @return
      */
-    public ApiProtocol(ChannelHandlerContext ctx, HttpRequest req) {
-        String uri = req.uri();
-        logger.info(uri);
-
-        QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
-        if (queryStringDecoder.parameters().size() > 0) {
-            this.parameters = queryStringDecoder.parameters();
-        }
+    public ApiProtocol(ChannelHandlerContext ctx, Object msg) {
+        HttpRequest req = (HttpRequest) msg;
 
         String clientIP = (String) req.headers().get("X-Forwarded-For");
         if (clientIP == null) {
@@ -124,7 +115,9 @@ public class ApiProtocol {
 
         this.method = req.method();
 
-        postDataDecode(req);
+        queryStringHandler(req);
+        requestParametersHandler(req);
+        requestBodyHandler(msg);
 
         if (this.parameters.size() == 0) {
             return;
@@ -135,9 +128,9 @@ public class ApiProtocol {
     }
 
     /**
-     * 协议属性赋值，存入 {@link #parameters}
+     * set this class field's value by {@link #parameters}
      *
-     * 优化笔记 <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
+     * the code improved log in my blog <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
     public void setFields() {
         Field[] fields = this.getClass().getDeclaredFields();
@@ -182,21 +175,37 @@ public class ApiProtocol {
     }
 
     /**
-     * 解析接收的 post 数据
+     * queryString decode, put all the query key value in {@link #parameters}
      *
-     * 键值对 a=b&c=d 存入 {@link #parameters}
-     * 纯 post body 的内容存入 {@link #postBody}
+     * use netty's {@link QueryStringDecoder} replace my bad decode method <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a>
      *
      * @param req
      */
-    public void postDataDecode(HttpRequest req){
+    public void queryStringHandler(HttpRequest req){
+        String uri = req.uri();
+        logger.info(uri);
+
+        QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
+        if (queryStringDecoder.parameters().size() > 0) {
+            this.parameters = queryStringDecoder.parameters();
+        }
+    }
+
+    /**
+     * request parameters put in {@link #parameters}
+     *
+     * @param req
+     */
+    public void requestParametersHandler(HttpRequest req){
         if (req.method().equals(HttpMethod.POST)) {
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
             try{
                 List<InterfaceHttpData> postList = decoder.getBodyHttpDatas();
                 for (InterfaceHttpData data : postList) {
                     List<String> values = new ArrayList<String>();
-                    values.add(((MixedAttribute) data).getValue());
+                    MixedAttribute value = (MixedAttribute) data;
+                    value.setCharset(CharsetUtil.UTF_8);
+                    values.add(value.getValue());
                     this.parameters.put(data.getName(),values);
                 }
             }catch (Exception e){
@@ -204,4 +213,20 @@ public class ApiProtocol {
             }
         }
     }
+
+    /**
+     * request body put in {@link #postBody}
+     *
+     * @param msg
+     */
+    public void requestBodyHandler(Object msg){
+        if (msg instanceof HttpContent) {
+            HttpContent httpContent = (HttpContent) msg;
+            ByteBuf content = httpContent.content();
+            StringBuilder buf = new StringBuilder();
+            buf.append(content.toString(CharsetUtil.UTF_8));
+            this.postBody = buf.toString();
+        }
+    }
+
 }
