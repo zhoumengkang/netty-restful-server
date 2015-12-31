@@ -13,6 +13,7 @@ public class UserService {
     public static List<User> list(){
         List<User> users = new ArrayList<User>();
         users.add(new User(1,"mengkang.zhou",25));
+        users.add(new User(2,"meng.zhou",23));
         return users;
     }
 }

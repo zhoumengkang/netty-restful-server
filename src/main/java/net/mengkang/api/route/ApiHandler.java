@@ -1,6 +1,8 @@
 package net.mengkang.api.route;
 
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import net.mengkang.api.controller.BaseApi;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by zhoumengkang on 30/12/15.
+ * 衔接 netty 和 api 控制器
  */
 public class ApiHandler {
 
@@ -29,116 +31,18 @@ public class ApiHandler {
      * @return
      */
     public static byte[] transfer(ChannelHandlerContext ctx, HttpRequest httpRequest) {
-        ApiProtocol apiProtocol = apiProtocolInitializer(ctx, httpRequest);
+        ApiProtocol apiProtocol = new ApiProtocol(ctx, httpRequest);
 
-        if (apiProtocol.api == null) {
+        if (apiProtocol.getApi() == null) {
             return decode(BaseApi.error(BaseApi.API_CAN_NOT_BE_NULL));
         }
 
-        Object result = invoke(apiProtocol.api, apiProtocol);
+        Object result = invoke(apiProtocol.getApi(), apiProtocol);
         if (result == null) {
             return decode(BaseApi.error(BaseApi.UNKNOWN_ERROR));
         }
 
         return decode(result);
-    }
-
-    /**
-     * 传输协议初始化
-     *
-     * @param ctx
-     * @param httpRequest
-     * @return
-     */
-    public static ApiProtocol apiProtocolInitializer(ChannelHandlerContext ctx, HttpRequest httpRequest) {
-        String uri = httpRequest.uri();
-        logger.info(uri);
-
-        // 使用 netty 自带的替换之前自己做的简单解析的方法 http://mengkang.net/587.html
-        QueryStringDecoder        queryStringDecoder = new QueryStringDecoder(uri);
-        Map<String, List<String>> parameters         = queryStringDecoder.parameters();
-
-        ApiProtocol apiProtocol = new ApiProtocol();
-
-        String clientIP = (String) httpRequest.headers().get("X-Forwarded-For");
-        if (clientIP == null) {
-            InetSocketAddress remoteSocket = (InetSocketAddress) ctx.channel().remoteAddress();
-            clientIP = remoteSocket.getAddress().getHostAddress();
-        }
-        apiProtocol.clientIP = clientIP;
-
-        InetSocketAddress serverSocket = (InetSocketAddress) ctx.channel().localAddress();
-        apiProtocol.serverIP = serverSocket.getAddress().getHostAddress();
-
-        final String build      = "build";
-        final String appVersion = "appVersion";
-        final String channel    = "channel";
-        final String api        = "api";
-        final String geo        = "geo";
-        final String offset     = "offset";
-        final String limit      = "limit";
-        final String auth       = "auth";
-
-        apiProtocol.method = httpRequest.method();
-
-        if (parameters.containsKey(build)) {
-            try {
-                apiProtocol.build = Integer.parseInt(parameters.get(build).get(0));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } finally {
-                parameters.remove(build);
-            }
-        }
-
-        if (parameters.containsKey(appVersion)) {
-            apiProtocol.appVersion = parameters.get(appVersion).get(0);
-            parameters.remove(appVersion);
-        }
-
-        if (parameters.containsKey(channel)) {
-            apiProtocol.channel = parameters.get(channel).get(0);
-            parameters.remove(channel);
-        }
-
-        if (parameters.containsKey(api)) {
-            apiProtocol.api = parameters.get(api).get(0);
-            parameters.remove(api);
-        }
-
-        if (parameters.containsKey(geo)) {
-            apiProtocol.geo = parameters.get(geo).get(0);
-            parameters.remove(geo);
-        }
-
-        if (parameters.containsKey(offset)) {
-            try {
-                apiProtocol.offset = Integer.parseInt(parameters.get(offset).get(0));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } finally {
-                parameters.remove(offset);
-            }
-        }
-
-        if (parameters.containsKey(limit)) {
-            try {
-                apiProtocol.limit = Integer.parseInt(parameters.get(limit).get(0));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } finally {
-                apiProtocol.limit = (apiProtocol.limit > 30) ? 30 : apiProtocol.limit; // 防止被人一次性请求大量数据
-                parameters.remove(limit);
-            }
-        }
-
-        if (parameters.containsKey(auth)) {
-            apiProtocol.auth = parameters.get(auth).get(0);
-            parameters.remove(auth);
-        }
-
-
-        return apiProtocol;
     }
 
     /**
