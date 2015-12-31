@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
@@ -113,78 +114,59 @@ public class ApiProtocol {
 
         this.method = req.method();
 
-        if (req.method().equals(HttpMethod.POST) && req instanceof HttpContent){
+        if (req.method().equals(HttpMethod.POST) && req instanceof HttpContent) {
             System.out.println("post请求");
         }
 
         decodeRequestParameters();
     }
 
-    private void decodeRequestParameters(){
+    public ApiProtocol() {
+    }
 
-        final String build      = "build";
-        final String appVersion = "appVersion";
-        final String channel    = "channel";
-        final String api        = "api";
-        final String geo        = "geo";
-        final String offset     = "offset";
-        final String limit      = "limit";
-        final String auth       = "auth";
+    /**
+     * 解析 queryString
+     * 优化笔记 <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
+     */
+    public void decodeRequestParameters() {
+        Field[] fields = this.getClass().getDeclaredFields();
 
-        if (this.parameters.containsKey(build)) {
+        for (int i = 0, length = fields.length; i < length; i++) {
+            Field field = fields[i];
+            String filedName = field.getName();
+
+            if (filedName.equals("logger")
+                    || filedName.equals("method")
+                    || filedName.equals("parameters")
+                    || filedName.equals("postBody")) {
+                continue;
+            }
+
+            if (!this.parameters.containsKey(filedName)) {
+                continue;
+            }
+
+            String fieldType = field.getType().getName();
+            field.setAccessible(true);
             try {
-                this.build = Integer.parseInt(this.parameters.get(build).get(0));
+                if (fieldType.endsWith("Integer")) {
+                    field.set(this, Integer.parseInt(this.parameters.get(filedName).get(0)));
+                } else if (fieldType.endsWith("Float")) {
+                    field.set(this, Float.parseFloat(this.parameters.get(filedName).get(0)));
+                } else if (fieldType.endsWith("Long")) {
+                    field.set(this, Long.parseLong(this.parameters.get(filedName).get(0)));
+                } else if (fieldType.endsWith("Double")) {
+                    field.set(this, Double.parseDouble(this.parameters.get(filedName).get(0)));
+                } else {
+                    field.set(this, this.parameters.get(filedName).get(0));
+                }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-            } finally {
-                this.parameters.remove(build);
-            }
-        }
-
-        if (this.parameters.containsKey(appVersion)) {
-            this.appVersion = this.parameters.get(appVersion).get(0);
-            this.parameters.remove(appVersion);
-        }
-
-        if (this.parameters.containsKey(channel)) {
-            this.channel = this.parameters.get(channel).get(0);
-            this.parameters.remove(channel);
-        }
-
-        if (this.parameters.containsKey(api)) {
-            this.api = this.parameters.get(api).get(0);
-            this.parameters.remove(api);
-        }
-
-        if (this.parameters.containsKey(geo)) {
-            this.geo = this.parameters.get(geo).get(0);
-            this.parameters.remove(geo);
-        }
-
-        if (this.parameters.containsKey(offset)) {
-            try {
-                this.offset = Integer.parseInt(this.parameters.get(offset).get(0));
-            } catch (NumberFormatException e) {
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } finally {
-                this.parameters.remove(offset);
             }
-        }
 
-        if (this.parameters.containsKey(limit)) {
-            try {
-                this.limit = Integer.parseInt(this.parameters.get(limit).get(0));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } finally {
-                this.limit = (this.limit > 30) ? 30 : this.limit; // 防止被人一次性请求大量数据
-                this.parameters.remove(limit);
-            }
-        }
-
-        if (this.parameters.containsKey(auth)) {
-            this.auth = this.parameters.get(auth).get(0);
-            this.parameters.remove(auth);
+            this.parameters.remove(filedName);
         }
     }
 }

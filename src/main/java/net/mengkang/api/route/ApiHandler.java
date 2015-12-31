@@ -1,10 +1,7 @@
 package net.mengkang.api.route;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
 import net.mengkang.api.controller.BaseApi;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,9 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 衔接 netty 和 api 控制器
@@ -64,14 +58,12 @@ public class ApiHandler {
         String   classAndMethod      = ApiRoute.apiMap.get(api);
         String[] classAndMethodArray = classAndMethod.split("\\.");
 
-
         try {
             classname = Class.forName("net.mengkang.api.controller." + classAndMethodArray[0]);
         } catch (ClassNotFoundException e) {
             logger.error(e.toString());
             return BaseApi.error(BaseApi.API_NOT_FOUND);
         }
-
 
         try {
             method = classname.getMethod(classAndMethodArray[1], ApiProtocol.class);
