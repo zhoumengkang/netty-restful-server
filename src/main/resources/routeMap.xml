@@ -4,6 +4,6 @@
         <httpMethod>get</httpMethod>
         <httpMethod>post</httpMethod>
         <classAndMethod>UserApi.list</classAndMethod>
-        <version>101</version>
+        <build>101</build>
     </api>
 </routeMap>

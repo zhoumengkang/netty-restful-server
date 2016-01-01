@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +45,8 @@ public class ApiRoute {
                 Element element = (Element) apiList.item(i);
 
                 Api api = new Api();
+                Field[] fields = api.getClass().getDeclaredFields();
+
                 api.setName(element.getAttribute(apiName));
 
                 for (Node node = element.getFirstChild(); node != null; node = node.getNextSibling()) {
