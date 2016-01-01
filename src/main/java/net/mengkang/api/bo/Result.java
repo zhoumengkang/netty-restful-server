@@ -5,7 +5,7 @@ package net.mengkang.api.bo;
  */
 public class Result {
 
-    private Info info;
+    protected Info info;
 
     public Info getInfo() {
         return info;
@@ -17,5 +17,9 @@ public class Result {
 
     public Result() {
         this.info = new Info();
+    }
+
+    public Result(Info info) {
+        this.info = info;
     }
 }

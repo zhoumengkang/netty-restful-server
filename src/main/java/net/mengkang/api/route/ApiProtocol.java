@@ -39,7 +39,7 @@ public class ApiProtocol {
     private int                       limit      = 10;
     private HttpMethod                method     = HttpMethod.GET;
     private Map<String, List<String>> parameters = new HashMap<String, List<String>>(); // get 和 post 的键值对都存储在这里
-    public  String                    postBody   = null; // post 请求时的非键值对内容
+    private String                    postBody   = null; // post 请求时的非键值对内容
 
     public int getBuild() {
         return build;
@@ -132,7 +132,7 @@ public class ApiProtocol {
      *
      * the code improved log in my blog <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
-    public void setFields() {
+    private void setFields() {
         Field[] fields = this.getClass().getDeclaredFields();
 
         for (int i = 0, length = fields.length; i < length; i++) {
@@ -181,7 +181,7 @@ public class ApiProtocol {
      *
      * @param req
      */
-    public void queryStringHandler(HttpRequest req){
+    private void queryStringHandler(HttpRequest req){
         String uri = req.uri();
         logger.info(uri);
 
@@ -196,7 +196,7 @@ public class ApiProtocol {
      *
      * @param req
      */
-    public void requestParametersHandler(HttpRequest req){
+    private void requestParametersHandler(HttpRequest req){
         if (req.method().equals(HttpMethod.POST)) {
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
             try{
@@ -219,7 +219,7 @@ public class ApiProtocol {
      *
      * @param msg
      */
-    public void requestBodyHandler(Object msg){
+    private void requestBodyHandler(Object msg){
         if (msg instanceof HttpContent) {
             HttpContent httpContent = (HttpContent) msg;
             ByteBuf content = httpContent.content();

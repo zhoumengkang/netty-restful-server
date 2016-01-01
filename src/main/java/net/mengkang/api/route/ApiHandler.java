@@ -101,7 +101,19 @@ public class ApiHandler {
      * @return
      */
     public static byte[] decode(Object object) {
-        return new JSONObject(object).toString().getBytes();
+        String data = new JSONObject(object).toString();
+        data = filter(data);
+        return data.getBytes();
+    }
+
+    /**
+     * 有时候我们总是要对一些输出内容做控制，过滤、统一转换等
+     *
+     * @param data
+     * @return
+     */
+    public static String filter(String data){
+        return data;
     }
 
 }

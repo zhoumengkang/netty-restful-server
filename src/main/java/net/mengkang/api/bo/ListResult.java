@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ListResult extends Result {
 
-    private List<? extends BaseEntity> item;
+    protected List<? extends BaseEntity> item;
 
     public List<? extends BaseEntity> getItem() {
         return item;
@@ -19,4 +19,7 @@ public class ListResult extends Result {
         this.item = item;
     }
 
+    public ListResult(Info info) {
+        this.info = info;
+    }
 }

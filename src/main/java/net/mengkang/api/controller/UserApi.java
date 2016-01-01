@@ -14,13 +14,16 @@ import java.util.List;
 public class UserApi extends BaseApi {
 
     public static Object list(ApiProtocol apiProtocol) {
-        ListResult listResult = new ListResult();
 
-        ListInfo   info = new ListInfo();
-        List<User> list = UserService.list();
+        ListInfo   info       = new ListInfo();
+        ListResult listResult = new ListResult(info);
+
+        UserService userService = new UserService(apiProtocol);
+        List<User> list = userService.list();
+
         info.setNum(list.size());
         listResult.setItem(list);
-        listResult.setInfo(info);
+
         return listResult;
     }
 }
