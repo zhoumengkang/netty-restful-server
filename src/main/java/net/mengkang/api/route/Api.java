@@ -29,10 +29,6 @@ public class Api {
         return httpMethod;
     }
 
-    public void setHttpMethod(Set<String> httpMethod) {
-        this.httpMethod = httpMethod;
-    }
-
     public String[] getClassAndMethod() {
         return classAndMethod;
     }
