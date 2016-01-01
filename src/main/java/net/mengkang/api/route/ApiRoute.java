@@ -45,7 +45,6 @@ public class ApiRoute {
                 Element element = (Element) apiList.item(i);
 
                 Api api = new Api();
-                Field[] fields = api.getClass().getDeclaredFields();
 
                 api.setName(element.getAttribute(apiName));
 
