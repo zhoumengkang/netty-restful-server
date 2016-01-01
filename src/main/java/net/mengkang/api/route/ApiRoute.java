@@ -10,7 +10,6 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +22,7 @@ public class ApiRoute {
 
     private static final String routeName = "/routeMap.xml";
 
+    private static final String apiNode           = "api";
     private static final String apiName           = "name";
     private static final String apiHttpMethod     = "httpMethod";
     private static final String apiClassAndMethod = "classAndMethod";
@@ -40,7 +40,7 @@ public class ApiRoute {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(ApiRoute.class.getResourceAsStream(routeName));
 
-            NodeList apiList = doc.getElementsByTagName("api");
+            NodeList apiList = doc.getElementsByTagName(apiNode);
             for (int i = 0, apiLength = apiList.getLength(); i < apiLength; i++) {
                 Element element = (Element) apiList.item(i);
 
