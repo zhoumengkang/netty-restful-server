@@ -1,7 +1,9 @@
 package net.mengkang.api.controller;
 
+import net.mengkang.api.bo.Info;
 import net.mengkang.api.bo.ListInfo;
 import net.mengkang.api.bo.ListResult;
+import net.mengkang.api.bo.Result;
 import net.mengkang.api.entity.User;
 import net.mengkang.api.route.ApiProtocol;
 import net.mengkang.api.service.UserService;
@@ -25,5 +27,40 @@ public class UserApi extends BaseApi {
         listResult.setItem(list);
 
         return listResult;
+    }
+
+    private static class UserInfo extends Info {
+        private User user;
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+    }
+
+    public static Object get(ApiProtocol apiProtocol){
+
+        int uid = 0;
+
+        if (apiProtocol.getParameters().containsKey("uid")){
+            try {
+                uid = Integer.parseInt(apiProtocol.getParameters().get("uid").get(0));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return error(PARAM_FORMAT_ERROR,"uid");
+            }
+        }else{
+            return error(PARAM_CAN_NOT_BE_NULL,"uid");
+        }
+
+        UserService userService = new UserService(apiProtocol);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser(userService.get(uid));
+
+        return new Result(userInfo);
     }
 }

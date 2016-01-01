@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
-    <api name="test">
+    <api name="user.list">
         <httpMethod>get</httpMethod>
         <httpMethod>post</httpMethod>
         <classAndMethod>UserApi.list</classAndMethod>
+        <build>101</build>
+    </api>
+    <api name="user.get">
+        <httpMethod>get</httpMethod>
+        <classAndMethod>UserApi.get</classAndMethod>
         <build>101</build>
     </api>
 </routeMap>

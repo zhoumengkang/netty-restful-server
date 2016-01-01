@@ -19,6 +19,11 @@ public class Result {
         this.info = new Info();
     }
 
+    /**
+     * create a Result object with a user defined object extend Info
+     *
+     * @param info
+     */
     public Result(Info info) {
         this.info = info;
     }

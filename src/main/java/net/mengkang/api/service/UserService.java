@@ -15,6 +15,10 @@ public class UserService extends BaseService{
         this.apiProtocol = apiProtocol;
     }
 
+    public User get(int uid){
+        return new User(uid,"xxx",25);
+    }
+
     public List<User> list(){
         List<User> users = new ArrayList<User>();
         users.add(new User(1,"mengkang.zhou",25));
