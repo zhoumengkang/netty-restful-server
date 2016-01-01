@@ -1,7 +1,6 @@
 package net.mengkang.api.route;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.HttpRequest;
 import net.mengkang.api.controller.BaseApi;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -42,31 +41,43 @@ public class ApiHandler {
     /**
      * 反射调用 api
      *
-     * @param api
+     * @param apiName
      * @param apiProtocol
      * @return
      */
-    public static Object invoke(String api, ApiProtocol apiProtocol) {
+    public static Object invoke(String apiName, ApiProtocol apiProtocol) {
         Class<?> classname;
         Method   method;
         Object   result = null;
 
-        if (!ApiRoute.apiMap.containsKey(api)) {
+        Api api = ApiRoute.apiMap.get(apiName);
+        if (api == null) {
             return BaseApi.error(BaseApi.API_NOT_FOUND);
         }
 
-        String   classAndMethod      = ApiRoute.apiMap.get(api);
-        String[] classAndMethodArray = classAndMethod.split("\\.");
+        String[] classAndMethod = api.getClassAndMethod();
+
+        if (classAndMethod.length < 2) {
+            return BaseApi.error(BaseApi.API_NOT_FOUND);
+        }
+
+        if (apiProtocol.getBuild() < api.getBuild()){
+            return BaseApi.error(BaseApi.VERSION_IS_TOO_LOW);
+        }
+
+        if(!api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
+            return BaseApi.error(BaseApi.REQUEST_MODE_ERROR);
+        }
 
         try {
-            classname = Class.forName("net.mengkang.api.controller." + classAndMethodArray[0]);
+            classname = Class.forName("net.mengkang.api.controller." + classAndMethod[0]);
         } catch (ClassNotFoundException e) {
             logger.error(e.toString());
             return BaseApi.error(BaseApi.API_NOT_FOUND);
         }
 
         try {
-            method = classname.getMethod(classAndMethodArray[1], ApiProtocol.class);
+            method = classname.getMethod(classAndMethod[1], ApiProtocol.class);
         } catch (NoSuchMethodException e) {
             logger.error(e.toString());
             return BaseApi.error(BaseApi.API_NOT_FOUND);
@@ -75,9 +86,9 @@ public class ApiHandler {
         try {
             result = method.invoke(null, apiProtocol);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
 
         return result;

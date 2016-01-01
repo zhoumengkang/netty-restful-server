@@ -16,7 +16,6 @@ public final class Server {
 
     public static void main(String[] args) throws Exception {
 
-        // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
