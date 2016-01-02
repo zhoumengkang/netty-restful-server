@@ -9,7 +9,7 @@ At first, java 8 should be supported in your server.
 
 There's two way to run it.
 
-1. Run `net.mengkang.netty.Server` in Intellij IDEA, Then you can visit http://localhost:8080/?api=user.get&uid=1 in your browser for test.
+1. Run `net.mengkang.netty.Server` in Intellij IDEA, Then you can visit [http://localhost:8080/?api=user.get&uid=1](http://localhost:8080/?api=user.get&uid=1) in your browser for test.
 
 2. Anther way is use java command line to run it. Download the `netty-light-api-server-1.0.0.zip` and unzip it , then run it like this:
 ```sh
