@@ -1,0 +1,71 @@
+<configuration>
+    <property name="LOG_PATH" value="/Users/zhoumengkang/Documents/logs/netty-light-api-server"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} %L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 分日期生成日志仅记录最近30天的日志 -->
+    <!-- 仅仅用来记录访问日志不记录错误日志 -->
+    <appender name="ApiInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <Encoding>UTF-8</Encoding>
+        <File>${LOG_PATH}/api.info.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/api.info.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date [%thread] %-5level %logger{50} %L - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="ApiError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <Encoding>UTF-8</Encoding>
+        <File>${LOG_PATH}/api.error.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/api.error.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date [%thread] %-5level %logger{50} %L - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="ApiDebug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <Encoding>UTF-8</Encoding>
+        <File>${LOG_PATH}/api.debug.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/api.debug.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date [%thread] %-5level %logger{50} %L - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="net.mengkang.api" level="debug" additivity="true">
+        <appender-ref ref="ApiInfo"/>
+        <appender-ref ref="ApiError"/>
+        <appender-ref ref="ApiDebug"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

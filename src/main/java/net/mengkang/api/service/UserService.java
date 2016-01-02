@@ -12,7 +12,7 @@ import java.util.List;
 public class UserService extends BaseService{
 
     public UserService(ApiProtocol apiProtocol) {
-        this.apiProtocol = apiProtocol;
+        super(apiProtocol);
     }
 
     public User get(int uid){
