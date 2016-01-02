@@ -6,9 +6,6 @@ import net.mengkang.api.route.ApiProtocol;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by zhoumengkang on 31/12/15.
- */
 public class UserService extends BaseService{
 
     public UserService(ApiProtocol apiProtocol) {

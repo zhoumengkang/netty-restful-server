@@ -4,9 +4,6 @@ import net.mengkang.api.route.ApiProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by zhoumengkang on 16/1/2.
- */
 public class BaseService {
 
     protected ApiProtocol apiProtocol;

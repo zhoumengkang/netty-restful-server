@@ -12,13 +12,13 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
     public void initChannel(SocketChannel ch) {
         ChannelPipeline p = ch.pipeline();
 
-        // 实际是做了HttpRequestDecoder的操作
+        // HttpServerCodec is a combination of HttpRequestDecoder and HttpResponseEncoder
         p.addLast(new HttpServerCodec());
-        // 添加 gzip 压缩
+
+        // add gizp compressor for http response content
         p.addLast(new HttpContentCompressor());
 
-        // 如果你希望为一个单一的HTTP消息处理多个消息，你可以把HttpObjectAggregator放入管道里。HttpObjectAggregator会把多个消息转换为一个单一的FullHttpRequest或是FullHttpResponse
-        p.addLast(new HttpObjectAggregator(1048576));
+//        p.addLast(new HttpObjectAggregator(1048576));
 
         p.addLast(new ChunkedWriteHandler());
 

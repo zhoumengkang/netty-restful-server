@@ -10,14 +10,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * 衔接 netty 和 api 控制器
+ * connect netty server and api controller
+ *
  */
 public class ApiHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiHandler.class);
 
     /**
-     * api 数据输出统一入口和出口
+     * api data I/O port
      *
      * @param ctx
      * @param msg
@@ -27,19 +28,19 @@ public class ApiHandler {
         ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
         if (apiProtocol.getApi() == null) {
-            return decode(BaseApi.error(BaseApi.API_CAN_NOT_BE_NULL));
+            return encode(BaseApi.error(BaseApi.API_CAN_NOT_BE_NULL));
         }
 
         Object result = invoke(apiProtocol.getApi(), apiProtocol);
         if (result == null) {
-            return decode(BaseApi.error(BaseApi.UNKNOWN_ERROR));
+            return encode(BaseApi.error(BaseApi.UNKNOWN_ERROR));
         }
 
-        return decode(result);
+        return encode(result);
     }
 
     /**
-     * 反射调用 api
+     * invoke api controller method by apiName, but the request apiProtocol should observe routeMap regulations
      *
      * @param apiName
      * @param apiProtocol
@@ -47,6 +48,7 @@ public class ApiHandler {
      */
     public static Object invoke(String apiName, ApiProtocol apiProtocol) {
         Class<?> classname;
+        Object   classObject;
         Method   method;
         Object   result = null;
 
@@ -71,22 +73,29 @@ public class ApiHandler {
 
         try {
             classname = Class.forName("net.mengkang.api.controller." + classAndMethod[0]);
+            classObject = classname.newInstance();
         } catch (ClassNotFoundException e) {
-            logger.error(e.toString());
+            logger.error(e.getMessage());
+            return BaseApi.error(BaseApi.API_NOT_FOUND);
+        } catch (InstantiationException e) {
+            logger.error(e.getMessage());
+            return BaseApi.error(BaseApi.API_NOT_FOUND);
+        } catch (IllegalAccessException e) {
+            logger.error(e.getMessage());
             return BaseApi.error(BaseApi.API_NOT_FOUND);
         }
 
         try {
             method = classname.getMethod(classAndMethod[1], ApiProtocol.class);
         } catch (NoSuchMethodException e) {
-            logger.error(e.toString());
+            logger.error(e.getMessage());
             return BaseApi.error(BaseApi.API_NOT_FOUND);
         }
 
         try {
-            result = method.invoke(null, apiProtocol);
+            result = method.invoke(classObject, apiProtocol);
         } catch (InvocationTargetException e) {
-            logger.error(e.toString());
+            logger.error(e.getMessage());
         } catch (IllegalAccessException e) {
             logger.error(e.toString());
         }
@@ -95,19 +104,20 @@ public class ApiHandler {
     }
 
     /**
-     * 编码输出以及过滤处理
+     * exchange the api controller returns to a JSONObject
      *
      * @param object
      * @return
      */
-    public static byte[] decode(Object object) {
+    public static byte[] encode(Object object) {
         String data = new JSONObject(object).toString();
         data = filter(data);
         return data.getBytes();
     }
 
     /**
-     * 有时候我们总是要对一些输出内容做控制，过滤、统一转换等
+     * we always need filter something for some reason,
+     * otherwise we can replace the timestamp to the string we defined, and so on.
      *
      * @param data
      * @return

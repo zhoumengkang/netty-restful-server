@@ -1,8 +1,5 @@
 package net.mengkang.api.entity;
 
-/**
- * Created by zhoumengkang on 30/12/15.
- */
 public class User extends BaseEntity {
     private int id;
     private String name;

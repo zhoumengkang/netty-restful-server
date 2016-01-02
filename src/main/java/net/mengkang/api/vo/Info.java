@@ -1,8 +1,5 @@
 package net.mengkang.api.vo;
 
-/**
- * Created by zhoumengkang on 30/12/15.
- */
 public class Info {
     private boolean success = true;
     private int error = 0;

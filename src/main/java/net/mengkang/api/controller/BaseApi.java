@@ -2,14 +2,18 @@ package net.mengkang.api.controller;
 
 import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by zhoumengkang on 30/12/15.
+ * api controller base method
  */
 public class BaseApi {
+
+    protected Logger logger;
 
     public static final Map<Integer, String> errors = new HashMap<Integer, String>();
 
@@ -29,6 +33,10 @@ public class BaseApi {
         errors.put(PARAM_CAN_NOT_BE_NULL, "param : %s can't be null");
         errors.put(VERSION_IS_TOO_LOW, "version is too low, please update your client");
         errors.put(REQUEST_MODE_ERROR, "the http request method is not allow");
+    }
+
+    public BaseApi() {
+        logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public static Object error(int errorCode) {

@@ -1,11 +1,8 @@
 package net.mengkang.api.vo.user;
 
-import net.mengkang.api.vo.Info;
 import net.mengkang.api.entity.User;
+import net.mengkang.api.vo.Info;
 
-/**
- * Created by zhoumengkang on 16/1/2.
- */
 public class UserInfo extends Info {
     private User user;
 
@@ -13,7 +10,7 @@ public class UserInfo extends Info {
         return user;
     }
 
-    public void setUser(User user) {
+    public UserInfo(User user) {
         this.user = user;
     }
 }

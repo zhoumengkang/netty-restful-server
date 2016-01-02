@@ -175,9 +175,9 @@ public class ApiProtocol {
     }
 
     /**
-     * queryString decode, put all the query key value in {@link #parameters}
+     * queryString encode, put all the query key value in {@link #parameters}
      *
-     * use netty's {@link QueryStringDecoder} replace my bad decode method <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a>
+     * use netty's {@link QueryStringDecoder} replace my bad encode method <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a>
      *
      * @param req
      */

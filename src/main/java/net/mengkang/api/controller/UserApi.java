@@ -4,19 +4,16 @@ import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.ListInfo;
 import net.mengkang.api.vo.ListResult;
 import net.mengkang.api.vo.Result;
-import net.mengkang.api.vo.user.UserInfo;
 import net.mengkang.api.entity.User;
 import net.mengkang.api.route.ApiProtocol;
 import net.mengkang.api.service.UserService;
+import net.mengkang.api.vo.user.UserInfo;
 
 import java.util.List;
 
-/**
- * Created by zhoumengkang on 30/12/15.
- */
 public class UserApi extends BaseApi {
 
-    public static Object list(ApiProtocol apiProtocol) {
+    public Object list(ApiProtocol apiProtocol) {
 
         ListInfo   info       = new ListInfo();
         ListResult listResult = new ListResult(info);
@@ -31,25 +28,23 @@ public class UserApi extends BaseApi {
         return listResult;
     }
 
-    public static Object get(ApiProtocol apiProtocol){
+    public Object get(ApiProtocol apiProtocol) {
 
-        int uid = 0;
+        int uid;
 
-        if (apiProtocol.getParameters().containsKey("uid")){
+        if (apiProtocol.getParameters().containsKey("uid")) {
             try {
                 uid = Integer.parseInt(apiProtocol.getParameters().get("uid").get(0));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                return error(PARAM_FORMAT_ERROR,"uid");
+                return error(PARAM_FORMAT_ERROR, "uid");
             }
-        }else{
-            return error(PARAM_CAN_NOT_BE_NULL,"uid");
+        } else {
+            return error(PARAM_CAN_NOT_BE_NULL, "uid");
         }
 
         UserService userService = new UserService(apiProtocol);
-
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUser(userService.get(uid));
+        UserInfo userInfo    = new UserInfo(userService.get(uid));
 
         return new Result<Info>(userInfo);
     }
