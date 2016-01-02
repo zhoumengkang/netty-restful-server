@@ -4,8 +4,8 @@ package net.mengkang.api.bo;
  * Created by zhoumengkang on 30/12/15.
  */
 public class Info {
-    private boolean success;
-    private int error;
+    private boolean success = true;
+    private int error = 0;
     private String errorMessage;
 
     public boolean isSuccess() {

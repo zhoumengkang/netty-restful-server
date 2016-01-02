@@ -20,6 +20,6 @@ public class ListResult extends Result {
     }
 
     public ListResult(Info info) {
-        this.info = info;
+        super(info);
     }
 }

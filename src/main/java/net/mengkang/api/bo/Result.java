@@ -3,20 +3,12 @@ package net.mengkang.api.bo;
 /**
  * Created by zhoumengkang on 30/12/15.
  */
-public class Result {
+public class Result<T extends Info> {
 
-    protected Info info;
+    protected T info;
 
-    public Info getInfo() {
+    public T getInfo() {
         return info;
-    }
-
-    public void setInfo(Info info) {
-        this.info = info;
-    }
-
-    public Result() {
-        this.info = new Info();
     }
 
     /**
@@ -24,7 +16,7 @@ public class Result {
      *
      * @param info
      */
-    public Result(Info info) {
+    public Result(T info) {
         this.info = info;
     }
 }

@@ -1,5 +1,6 @@
 package net.mengkang.api.controller;
 
+import net.mengkang.api.bo.Info;
 import net.mengkang.api.bo.Result;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class BaseApi {
     }
 
     public static Object error(int errorCode) {
-        Result result = new Result();
+        Result result = new Result(new Info());
         result.getInfo().setError(errorCode).setErrorMessage(errors.get(errorCode));
         return result;
     }
@@ -43,7 +44,7 @@ public class BaseApi {
      * @return
      */
     public static Object error(int errorCode,String parameter) {
-        Result result = new Result();
+        Result result = new Result(new Info());
         result.getInfo()
                 .setError(errorCode)
                 .setErrorMessage(String.format(errors.get(errorCode), parameter));
