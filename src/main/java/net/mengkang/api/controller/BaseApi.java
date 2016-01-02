@@ -32,7 +32,7 @@ public class BaseApi {
     }
 
     public static Object error(int errorCode) {
-        Result result = new Result(new Info());
+        Result result = new Result<Info>(new Info());
         result.getInfo().setError(errorCode).setErrorMessage(errors.get(errorCode));
         return result;
     }
@@ -44,7 +44,7 @@ public class BaseApi {
      * @return
      */
     public static Object error(int errorCode,String parameter) {
-        Result result = new Result(new Info());
+        Result result = new Result<Info>(new Info());
         result.getInfo()
                 .setError(errorCode)
                 .setErrorMessage(String.format(errors.get(errorCode), parameter));

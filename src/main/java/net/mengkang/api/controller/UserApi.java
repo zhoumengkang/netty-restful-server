@@ -1,5 +1,6 @@
 package net.mengkang.api.controller;
 
+import net.mengkang.api.bo.Info;
 import net.mengkang.api.bo.ListInfo;
 import net.mengkang.api.bo.ListResult;
 import net.mengkang.api.bo.Result;
@@ -50,6 +51,6 @@ public class UserApi extends BaseApi {
         UserInfo userInfo = new UserInfo();
         userInfo.setUser(userService.get(uid));
 
-        return new Result(userInfo);
+        return new Result<Info>(userInfo);
     }
 }
