@@ -46,24 +46,31 @@ public class ApiRoute {
 
                 Api api = new Api();
 
-                api.setName(element.getAttribute(apiName));
-
                 for (Node node = element.getFirstChild(); node != null; node = node.getNextSibling()) {
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                         String name = node.getNodeName();
                         String value = node.getFirstChild().getNodeValue();
 
-                        if (name.equals(apiHttpMethod)) {
-                            api.addHttpMethod(value);
-                        } else if (name.equals(apiClassAndMethod)) {
-                            api.setClassAndMethod(value.split("\\."));
-                        } else if (name.equals(apiBuild)) {
-                            try {
-                                api.setBuild(Integer.parseInt(value));
-                            } catch (NumberFormatException e) {
-                                logger.error(e.getMessage());
-                            }
+                        switch (name) {
+                            case apiName :
+                                api.setName(value);
+                                break;
+                            case apiHttpMethod:
+                                api.addHttpMethod(value);
+                                break;
+                            case apiClassAndMethod:
+                                api.setClassAndMethod(value.split("\\."));
+                                break;
+                            case apiBuild:
+                                try {
+                                    api.setBuild(Integer.parseInt(value));
+                                } catch (NumberFormatException e) {
+                                    logger.error(e.getMessage());
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

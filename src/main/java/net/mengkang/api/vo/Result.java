@@ -1,4 +1,4 @@
-package net.mengkang.api.bo;
+package net.mengkang.api.vo;
 
 /**
  * Created by zhoumengkang on 30/12/15.

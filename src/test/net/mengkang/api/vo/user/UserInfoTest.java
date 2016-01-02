@@ -1,8 +1,8 @@
-package net.mengkang.api.bo.user;
+package net.mengkang.api.vo.user;
 
 import junit.framework.TestCase;
-import net.mengkang.api.bo.Info;
-import net.mengkang.api.bo.Result;
+import net.mengkang.api.vo.Info;
+import net.mengkang.api.vo.Result;
 import net.mengkang.api.entity.User;
 import org.json.JSONObject;
 

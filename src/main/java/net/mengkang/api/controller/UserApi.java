@@ -1,10 +1,10 @@
 package net.mengkang.api.controller;
 
-import net.mengkang.api.bo.Info;
-import net.mengkang.api.bo.ListInfo;
-import net.mengkang.api.bo.ListResult;
-import net.mengkang.api.bo.Result;
-import net.mengkang.api.bo.user.UserInfo;
+import net.mengkang.api.vo.Info;
+import net.mengkang.api.vo.ListInfo;
+import net.mengkang.api.vo.ListResult;
+import net.mengkang.api.vo.Result;
+import net.mengkang.api.vo.user.UserInfo;
 import net.mengkang.api.entity.User;
 import net.mengkang.api.route.ApiProtocol;
 import net.mengkang.api.service.UserService;

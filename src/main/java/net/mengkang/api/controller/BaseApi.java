@@ -1,7 +1,7 @@
 package net.mengkang.api.controller;
 
-import net.mengkang.api.bo.Info;
-import net.mengkang.api.bo.Result;
+import net.mengkang.api.vo.Info;
+import net.mengkang.api.vo.Result;
 
 import java.util.HashMap;
 import java.util.Map;
