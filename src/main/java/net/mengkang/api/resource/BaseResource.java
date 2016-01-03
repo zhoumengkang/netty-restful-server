@@ -1,4 +1,4 @@
-package net.mengkang.api.controller;
+package net.mengkang.api.resource;
 
 import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.Result;
@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * api controller base method
+ * api resource base method
  */
-public class BaseApi {
+public class BaseResource {
 
     protected Logger logger;
 
@@ -35,7 +35,7 @@ public class BaseApi {
         errors.put(REQUEST_MODE_ERROR, "the http request method is not allow");
     }
 
-    public BaseApi() {
+    public BaseResource() {
         logger = LoggerFactory.getLogger(this.getClass());
     }
 

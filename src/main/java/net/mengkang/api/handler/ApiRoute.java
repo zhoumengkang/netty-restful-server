@@ -1,4 +1,4 @@
-package net.mengkang.api.route;
+package net.mengkang.api.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package net.mengkang.api.route;
+package net.mengkang.api.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * convert the netty HttpRequest object to a api protocol object
- *
  */
 public class ApiProtocol {
 
@@ -32,6 +33,8 @@ public class ApiProtocol {
     private String                    clientIP   = null;
     private String                    serverIP   = null;
     private String                    api        = null;
+    private String                    endpoint   = null;
+    private String                    resource   = null;
     private String                    auth       = null;
     private int                       offset     = 0;
     private int                       limit      = 10;
@@ -65,6 +68,14 @@ public class ApiProtocol {
 
     public String getApi() {
         return api;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public String getResource() {
+        return resource;
     }
 
     public String getAuth() {
@@ -101,6 +112,31 @@ public class ApiProtocol {
     public ApiProtocol(ChannelHandlerContext ctx, Object msg) {
         HttpRequest req = (HttpRequest) msg;
 
+        String uri = req.uri();
+        logger.info(uri);
+        this.method = req.method();
+
+        setApi(uri);
+        setClientIpAndServerIp(ctx, req);
+        queryStringHandler(uri);
+        requestParametersHandler(req);
+        requestBodyHandler(msg);
+
+        if (this.parameters.size() > 0) {
+            setFields();
+        }
+    }
+
+    private void setApi(String uri) {
+        Pattern pattern = Pattern.compile("^/(.*?)\\?(.*?)");
+        Matcher matcher = pattern.matcher(uri);
+        if (matcher.find()) {
+            this.api = matcher.group(1);
+            this.endpoint = matcher.group(1);
+        }
+    }
+
+    private void setClientIpAndServerIp(ChannelHandlerContext ctx, HttpRequest req) {
         String clientIP = (String) req.headers().get("X-Forwarded-For");
         if (clientIP == null) {
             InetSocketAddress remoteSocket = (InetSocketAddress) ctx.channel().remoteAddress();
@@ -110,24 +146,11 @@ public class ApiProtocol {
 
         InetSocketAddress serverSocket = (InetSocketAddress) ctx.channel().localAddress();
         this.serverIP = serverSocket.getAddress().getHostAddress();
-
-        this.method = req.method();
-
-        queryStringHandler(req);
-        requestParametersHandler(req);
-        requestBodyHandler(msg);
-
-        if (this.parameters.size() == 0) {
-            return;
-        }
-
-        setFields();
-
     }
 
     /**
      * set this class field's value by {@link #parameters}
-     *
+     * <p/>
      * the code improved log in my blog <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
     private void setFields() {
@@ -162,10 +185,8 @@ public class ApiProtocol {
                 } else {
                     field.set(this, this.parameters.get(filedName).get(0));
                 }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (NumberFormatException | IllegalAccessException e) {
+                logger.error(e.getMessage());
             }
 
             this.parameters.remove(filedName);
@@ -174,14 +195,12 @@ public class ApiProtocol {
 
     /**
      * queryString encode, put all the query key value in {@link #parameters}
-     *
+     * <p/>
      * use netty's {@link QueryStringDecoder} replace my bad encode method <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a>
      *
-     * @param req
+     * @param uri
      */
-    private void queryStringHandler(HttpRequest req){
-        String uri = req.uri();
-        logger.info(uri);
+    private void queryStringHandler(String uri) {
 
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
         if (queryStringDecoder.parameters().size() > 0) {
@@ -194,19 +213,19 @@ public class ApiProtocol {
      *
      * @param req
      */
-    private void requestParametersHandler(HttpRequest req){
+    private void requestParametersHandler(HttpRequest req) {
         if (req.method().equals(HttpMethod.POST)) {
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
-            try{
+            try {
                 List<InterfaceHttpData> postList = decoder.getBodyHttpDatas();
                 for (InterfaceHttpData data : postList) {
                     List<String> values = new ArrayList<String>();
                     MixedAttribute value = (MixedAttribute) data;
                     value.setCharset(CharsetUtil.UTF_8);
                     values.add(value.getValue());
-                    this.parameters.put(data.getName(),values);
+                    this.parameters.put(data.getName(), values);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e.getMessage());
             }
         }
@@ -217,7 +236,7 @@ public class ApiProtocol {
      *
      * @param msg
      */
-    private void requestBodyHandler(Object msg){
+    private void requestBodyHandler(Object msg) {
         if (msg instanceof HttpContent) {
             HttpContent httpContent = (HttpContent) msg;
             ByteBuf content = httpContent.content();

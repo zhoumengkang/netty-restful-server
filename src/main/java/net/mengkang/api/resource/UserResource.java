@@ -1,17 +1,17 @@
-package net.mengkang.api.controller;
+package net.mengkang.api.resource;
 
 import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.ListInfo;
 import net.mengkang.api.vo.ListResult;
 import net.mengkang.api.vo.Result;
 import net.mengkang.api.entity.User;
-import net.mengkang.api.route.ApiProtocol;
+import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.service.UserService;
 import net.mengkang.api.vo.user.UserInfo;
 
 import java.util.List;
 
-public class UserApi extends BaseApi {
+public class UserResource extends BaseResource {
 
     public Object list(ApiProtocol apiProtocol) {
 

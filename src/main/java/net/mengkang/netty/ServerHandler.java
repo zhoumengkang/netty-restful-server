@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.AsciiString;
 import io.netty.handler.codec.http.*;
 
-import net.mengkang.api.route.ApiHandler;
+import net.mengkang.api.handler.ApiHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

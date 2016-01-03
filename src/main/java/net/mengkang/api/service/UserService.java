@@ -1,7 +1,7 @@
 package net.mengkang.api.service;
 
 import net.mengkang.api.entity.User;
-import net.mengkang.api.route.ApiProtocol;
+import net.mengkang.api.handler.ApiProtocol;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,6 +19,7 @@ public class Info {
 
     public Info setError(int error) {
         this.error = error;
+        this.success = false;
         return this;
     }
 

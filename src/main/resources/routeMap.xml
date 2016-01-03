@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
     <api>
-        <name>user.list</name>
+        <name>/user/${id}</name>
         <httpMethod>get</httpMethod>
         <httpMethod>post</httpMethod>
-        <classAndMethod>UserApi.list</classAndMethod>
-        <build>101</build>
-    </api>
-    <api>
-        <name>user.get</name>
-        <httpMethod>get</httpMethod>
-        <classAndMethod>UserApi.get</classAndMethod>
+        <httpMethod>put</httpMethod>
+        <httpMethod>patch</httpMethod>
+        <classAndMethod>UserResource</classAndMethod>
+        <resource>UserResource</resource>
         <build>101</build>
     </api>
 </routeMap>

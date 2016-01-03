@@ -1,6 +1,6 @@
 package net.mengkang.api.service;
 
-import net.mengkang.api.route.ApiProtocol;
+import net.mengkang.api.handler.ApiProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
