@@ -1,5 +1,5 @@
 <configuration>
-    <property name="LOG_PATH" value="/Users/zhoumengkang/Documents/logs/netty-light-api-server"/>
+    <property name="LOG_PATH" value="/Users/zhoumengkang/Documents/logs/netty-restful-server"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} %L - %msg%n</pattern>
