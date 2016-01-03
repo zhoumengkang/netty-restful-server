@@ -1,4 +1,4 @@
-# netty-light-api-server
+# netty-restful-server
 A light and high performance restful server build on netty. If you are preparing for leaning java or netty, it's a nice gift for you.
 
 Version 1.0.0
