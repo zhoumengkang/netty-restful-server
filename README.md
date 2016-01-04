@@ -15,7 +15,7 @@ There's two way to run it.
 
 [http://localhost:8080/user/1/album/10](http://localhost:8080/user/1/album/10)
 
-in your browser for test.
+in your browser for testing.
 
 2. Anther way is using java command line. 
 
