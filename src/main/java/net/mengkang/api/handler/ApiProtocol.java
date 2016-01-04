@@ -85,10 +85,10 @@ public class ApiProtocol {
         return parameters;
     }
 
-    private void addParameter(String key,String param){
+    private void addParameter(String key, String param) {
         List<String> params = new ArrayList<>();
         params.add(param);
-        this.parameters.put(key,params);
+        this.parameters.put(key, params);
     }
 
     public String getPostBody() {
@@ -133,20 +133,20 @@ public class ApiProtocol {
     private void parseEndpoint(String uri) {
         String endpoint = uri.split("\\?")[0];
         if (endpoint.endsWith("/")) {
-            endpoint = endpoint.substring(0,endpoint.length());
+            endpoint = endpoint.substring(0, endpoint.length());
         }
 
-        Set<Map.Entry<String,Api>> set = ApiRoute.apiMap.entrySet();
+        Set<Map.Entry<String, Api>> set = ApiRoute.apiMap.entrySet();
 
-        for (Map.Entry<String,Api> entry : set) {
+        for (Map.Entry<String, Api> entry : set) {
             Api api = entry.getValue();
-            Pattern pattern = Pattern.compile(api.getRegex());
+            Pattern pattern = Pattern.compile("^" + api.getRegex() + "$");
             Matcher matcher = pattern.matcher(endpoint);
             while (matcher.find()) {
                 this.api = api.getName();
                 if (matcher.groupCount() > 0) {
                     for (int i = 0; i < matcher.groupCount(); i++) {
-                        addParameter(api.getParameterNames().get(i),matcher.group(i + 1));
+                        addParameter(api.getParameterNames().get(i), matcher.group(i + 1));
                     }
                 }
             }
@@ -168,7 +168,7 @@ public class ApiProtocol {
 
     /**
      * set this class field's value by {@link #parameters}
-     * <p/>
+     * <p>
      * the code improved log in my blog <a href="http://mengkang.net/614.html">http://mengkang.net/614.html</>
      */
     private void setFields() {
@@ -213,7 +213,7 @@ public class ApiProtocol {
 
     /**
      * queryString encode, put all the query key value in {@link #parameters}
-     * <p/>
+     * <p>
      * use netty's {@link QueryStringDecoder} replace my bad encode method <a href="http://mengkang.net/587.html">http://mengkang.net/587.html</a>
      *
      * @param uri
@@ -222,7 +222,7 @@ public class ApiProtocol {
 
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
         if (queryStringDecoder.parameters().size() > 0) {
-            this.parameters = queryStringDecoder.parameters();
+            this.parameters.putAll(queryStringDecoder.parameters());
         }
     }
 
