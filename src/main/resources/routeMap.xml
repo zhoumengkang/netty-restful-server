@@ -15,7 +15,7 @@
         <regex>/user/(\d+)/album/(\d+)</regex>
         <method>get</method>
         <method>post</method>
-        <resource>UserAlbumResource</resource>
+        <resource>AlbumResource</resource>
         <build>102</build>
     </api>
 </routeMap>

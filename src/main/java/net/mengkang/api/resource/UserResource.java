@@ -7,13 +7,12 @@ import net.mengkang.api.vo.Result;
 import net.mengkang.api.entity.User;
 import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.service.UserService;
-import net.mengkang.api.vo.user.UserInfo;
 
 import java.util.List;
 
 public class UserResource extends BaseResource {
 
-    public Object list(ApiProtocol apiProtocol) {
+    /*public Object list(ApiProtocol apiProtocol) {
 
         ListInfo   info       = new ListInfo();
         ListResult listResult = new ListResult(info);
@@ -26,6 +25,18 @@ public class UserResource extends BaseResource {
         listResult.setItem(list);
 
         return listResult;
+    }*/
+
+    public class UserInfo extends Info {
+        private User user;
+
+        public User getUser() {
+            return user;
+        }
+
+        public UserInfo(User user) {
+            this.user = user;
+        }
     }
 
     public Object get(ApiProtocol apiProtocol) {
