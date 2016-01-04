@@ -14,6 +14,7 @@
         <name>/user/uid/album/aid</name>
         <regex>/user/(\d+)/album/(\d+)</regex>
         <method>get</method>
+        <method>post</method>
         <resource>UserAlbumResource</resource>
         <build>102</build>
     </api>
