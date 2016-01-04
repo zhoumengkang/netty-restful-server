@@ -35,5 +35,5 @@ Download the
 [netty-restful-server-1.0.1.zip](https://github.com/zhoumengkang/netty-light-api-server/releases/download/1.0.1/netty-light-api-server-1.0.1.zip) 
 and unzip it , then run it like this:
 ```sh
-java -Dfile.encoding=UTF-8 -jar netty-light-api-server-1.0-SNAPSHOT.jar
+java -Dfile.encoding=UTF-8 -jar netty-restful-server-1.0-SNAPSHOT.jar
 ```
