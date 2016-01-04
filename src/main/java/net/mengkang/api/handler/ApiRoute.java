@@ -24,8 +24,9 @@ public class ApiRoute {
 
     private static final String apiNode           = "api";
     private static final String apiName           = "name";
-    private static final String apiHttpMethod     = "httpMethod";
-    private static final String apiClassAndMethod = "classAndMethod";
+    private static final String apiRegex          = "regex";
+    private static final String apiHttpMethod     = "method";
+    private static final String apiResource       = "resource";
     private static final String apiBuild          = "build";
 
     public static final Map<String, Api> apiMap = new HashMap<String, Api>();
@@ -53,14 +54,17 @@ public class ApiRoute {
                         String value = node.getFirstChild().getNodeValue();
 
                         switch (name) {
-                            case apiName :
+                            case apiName:
                                 api.setName(value);
+                                break;
+                            case apiRegex:
+                                api.setRegex(value);
                                 break;
                             case apiHttpMethod:
                                 api.addHttpMethod(value);
                                 break;
-                            case apiClassAndMethod:
-                                api.setClassAndMethod(value.split("\\."));
+                            case apiResource:
+                                api.setResource(value);
                                 break;
                             case apiBuild:
                                 try {

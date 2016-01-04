@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
     <api>
-        <name>/user/${id}</name>
-        <httpMethod>get</httpMethod>
-        <httpMethod>post</httpMethod>
-        <httpMethod>put</httpMethod>
-        <httpMethod>patch</httpMethod>
-        <classAndMethod>UserResource</classAndMethod>
+        <name>/user/uid/star/fid</name>
+        <regex>/user/(\d+)/star/(\d+)</regex>
+        <method>get</method>
+        <method>post</method>
+        <method>put</method>
+        <method>patch</method>
         <resource>UserResource</resource>
         <build>101</build>
     </api>

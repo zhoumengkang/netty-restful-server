@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,8 +30,6 @@ public class ApiProtocol {
     private String                    clientIP   = null;
     private String                    serverIP   = null;
     private String                    api        = null;
-    private String                    endpoint   = null;
-    private String                    resource   = null;
     private String                    auth       = null;
     private int                       offset     = 0;
     private int                       limit      = 10;
@@ -70,14 +65,6 @@ public class ApiProtocol {
         return api;
     }
 
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
     public String getAuth() {
         return auth;
     }
@@ -98,6 +85,12 @@ public class ApiProtocol {
         return parameters;
     }
 
+    private void addParameter(String key,String param){
+        List<String> params = new ArrayList<>();
+        params.add(param);
+        this.parameters.put(key,params);
+    }
+
     public String getPostBody() {
         return postBody;
     }
@@ -113,10 +106,14 @@ public class ApiProtocol {
         HttpRequest req = (HttpRequest) msg;
 
         String uri = req.uri();
+        if (uri.length() <= 0) {
+            return;
+        }
+
         logger.info(uri);
         this.method = req.method();
 
-        setApi(uri);
+        parseEndpoint(uri);
         setClientIpAndServerIp(ctx, req);
         queryStringHandler(uri);
         requestParametersHandler(req);
@@ -127,13 +124,34 @@ public class ApiProtocol {
         }
     }
 
-    private void setApi(String uri) {
-        Pattern pattern = Pattern.compile("^/(.*?)\\?(.*?)");
-        Matcher matcher = pattern.matcher(uri);
-        if (matcher.find()) {
-            this.api = matcher.group(1);
-            this.endpoint = matcher.group(1);
+    /**
+     * parse endpoint
+     * match api name and api regex and add resource params into {@link #parameters}
+     *
+     * @param uri
+     */
+    private void parseEndpoint(String uri) {
+        String endpoint = uri.split("\\?")[0];
+        if (endpoint.endsWith("/")) {
+            endpoint = endpoint.substring(0,endpoint.length());
         }
+
+        Set<Map.Entry<String,Api>> set = ApiRoute.apiMap.entrySet();
+
+        for (Map.Entry<String,Api> entry : set) {
+            Api api = entry.getValue();
+            Pattern pattern = Pattern.compile(api.getRegex());
+            Matcher matcher = pattern.matcher(endpoint);
+            while (matcher.find()) {
+                this.api = api.getName();
+                if (matcher.groupCount() > 0) {
+                    for (int i = 0; i < matcher.groupCount(); i++) {
+                        addParameter(api.getParameterNames().get(i),matcher.group(i + 1));
+                    }
+                }
+            }
+        }
+
     }
 
     private void setClientIpAndServerIp(ChannelHandlerContext ctx, HttpRequest req) {

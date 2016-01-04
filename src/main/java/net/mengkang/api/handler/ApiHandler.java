@@ -57,22 +57,16 @@ public class ApiHandler {
             return BaseResource.error(BaseResource.API_NOT_FOUND);
         }
 
-        String[] classAndMethod = api.getClassAndMethod();
-
-//        if (classAndMethod.length < 2) {
-//            return BaseResource.error(BaseResource.API_NOT_FOUND);
-//        }
-
         if (apiProtocol.getBuild() < api.getBuild()){
             return BaseResource.error(BaseResource.VERSION_IS_TOO_LOW);
         }
 
-        if(!api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
+        if(api.getHttpMethod() != null && !api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
             return BaseResource.error(BaseResource.REQUEST_MODE_ERROR);
         }
 
         try {
-            classname = Class.forName("net.mengkang.api.resource." + classAndMethod[0]);
+            classname = Class.forName("net.mengkang.api.resource." + api.getResource());
             classObject = classname.newInstance();
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
@@ -86,7 +80,7 @@ public class ApiHandler {
         }
 
         try {
-            method = classname.getMethod(classAndMethod[1], ApiProtocol.class);
+            method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase(), ApiProtocol.class);
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
             return BaseResource.error(BaseResource.API_NOT_FOUND);
