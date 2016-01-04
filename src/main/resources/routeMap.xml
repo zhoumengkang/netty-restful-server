@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
     <api>
-        <name>/user/uid/star/fid</name>
-        <regex>/user/(\d+)/star/(\d+)</regex>
+        <name>/user/uid</name>
+        <regex>/user/(\d+)</regex>
         <method>get</method>
         <method>post</method>
         <method>put</method>
         <method>patch</method>
         <resource>UserResource</resource>
         <build>101</build>
+    </api>
+    <api>
+        <name>/user/uid/album/aid</name>
+        <regex>/user/(\d+)/album/(\d+)</regex>
+        <method>get</method>
+        <resource>UserAlbumResource</resource>
+        <build>102</build>
     </api>
 </routeMap>

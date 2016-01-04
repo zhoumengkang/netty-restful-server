@@ -1,5 +1,6 @@
 package net.mengkang.api.resource;
 
+import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.Result;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ public class BaseResource {
 
     protected Logger logger;
 
-    public static final Map<Integer, String> errors = new HashMap<Integer, String>();
+    public static final Map<Integer, String> errors = new HashMap<>();
 
     public static final int UNKNOWN_ERROR         = 1000;
     public static final int API_NOT_FOUND         = 1001;
@@ -40,7 +41,7 @@ public class BaseResource {
     }
 
     public static Object error(int errorCode) {
-        Result result = new Result<Info>(new Info());
+        Result result = new Result<>(new Info());
         result.getInfo().setError(errorCode).setErrorMessage(errors.get(errorCode));
         return result;
     }
@@ -51,11 +52,24 @@ public class BaseResource {
      * @param parameter
      * @return
      */
-    public static Object error(int errorCode,String parameter) {
-        Result result = new Result<Info>(new Info());
+    public static Result error(int errorCode,String parameter) {
+        Result result = new Result<>(new Info());
         result.getInfo()
                 .setError(errorCode)
                 .setErrorMessage(String.format(errors.get(errorCode), parameter));
         return result;
+    }
+
+    public static Object parameterIntCheck(ApiProtocol apiProtocol,String parameter){
+        if (apiProtocol.getParameters().containsKey(parameter)) {
+            try {
+                return Integer.parseInt(apiProtocol.getParameters().get(parameter).get(0));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return error(PARAM_FORMAT_ERROR, parameter);
+            }
+        } else {
+            return error(PARAM_CAN_NOT_BE_NULL, parameter);
+        }
     }
 }
