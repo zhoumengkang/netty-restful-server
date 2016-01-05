@@ -27,8 +27,12 @@ public class ApiHandler {
     public static byte[] transfer(ChannelHandlerContext ctx, Object msg) {
         ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
-        if (apiProtocol.getApi() == null) {
+        if (apiProtocol.getEndpoint() == null) {
             return encode(ResponseHandler.error(ResponseHandler.API_CAN_NOT_BE_NULL));
+        }
+
+        if (apiProtocol.getApi() == null) {
+            return encode(ResponseHandler.error(ResponseHandler.API_NOT_FOUND));
         }
 
         Object result = invoke(apiProtocol.getApi(), apiProtocol);

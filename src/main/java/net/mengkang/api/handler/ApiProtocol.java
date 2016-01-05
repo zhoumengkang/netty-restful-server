@@ -30,6 +30,7 @@ public class ApiProtocol {
     private String                    clientIP   = null;
     private String                    serverIP   = null;
     private String                    api        = null;
+    private String                    endpoint   = null;
     private String                    auth       = null;
     private int                       offset     = 0;
     private int                       limit      = 10;
@@ -63,6 +64,10 @@ public class ApiProtocol {
 
     public String getApi() {
         return api;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
     }
 
     public String getAuth() {
@@ -135,6 +140,7 @@ public class ApiProtocol {
         if (endpoint.endsWith("/")) {
             endpoint = endpoint.substring(0, endpoint.length());
         }
+        this.endpoint = endpoint;
 
         Set<Map.Entry<String, Api>> set = ApiRoute.apiMap.entrySet();
 
