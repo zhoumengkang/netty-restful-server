@@ -20,6 +20,7 @@ public class ResponseHandler {
     public static final int PARAM_CAN_NOT_BE_NULL = 1004;
     public static final int VERSION_IS_TOO_LOW    = 1005;
     public static final int REQUEST_MODE_ERROR    = 1006;
+    public static final int API_SERVER_ERROR      = 1007;
 
     static {
         codeMap.put(UNKNOWN_ERROR, "unknown error");
@@ -29,6 +30,7 @@ public class ResponseHandler {
         codeMap.put(PARAM_CAN_NOT_BE_NULL, "param : %s can't be null");
         codeMap.put(VERSION_IS_TOO_LOW, "version is too low, please update your client");
         codeMap.put(REQUEST_MODE_ERROR, "the http request method is not allow");
+        codeMap.put(API_SERVER_ERROR, "api server error");
     }
 
     public static Object error(int errorCode) {

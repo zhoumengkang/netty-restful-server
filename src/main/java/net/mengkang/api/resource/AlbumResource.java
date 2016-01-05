@@ -5,10 +5,15 @@ import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.service.AlbumService;
 import net.mengkang.api.response.Info;
 import net.mengkang.api.response.Result;
+import org.slf4j.Logger;
 
 public class AlbumResource extends BaseResource {
 
-    public Object get(ApiProtocol apiProtocol) {
+    public AlbumResource(ApiProtocol apiProtocol) {
+        super(apiProtocol);
+    }
+
+    public Object get() {
 
         int uid, aid;
 

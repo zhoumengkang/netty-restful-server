@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -53,6 +54,7 @@ public class ApiHandler {
     public static Object invoke(String apiName, ApiProtocol apiProtocol) {
         Class<?> classname;
         Object   classObject;
+        Constructor constructor;
         Method   method;
         Object   result = null;
 
@@ -71,27 +73,34 @@ public class ApiHandler {
 
         try {
             classname = Class.forName("net.mengkang.api.resource." + api.getResource());
-            classObject = classname.newInstance();
-        } catch (ClassNotFoundException e) {
-            logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
-        } catch (InstantiationException e) {
-            logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
-        }
-
-        try {
-            method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase(), ApiProtocol.class);
+            constructor = classname.getConstructor(ApiProtocol.class);
+            classObject = constructor.newInstance(apiProtocol);
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+        } catch (ClassNotFoundException e) {
+            logger.error(e.getMessage());
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+        } catch (InvocationTargetException e) {
+            logger.error(e.getMessage());
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+        } catch (InstantiationException e) {
+            logger.error(e.getMessage());
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+        } catch (IllegalAccessException e) {
+            logger.error(e.getMessage());
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
         }
 
         try {
-            result = method.invoke(classObject, apiProtocol);
+            method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase());
+        } catch (NoSuchMethodException e) {
+            logger.error(e.getMessage());
+            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+        }
+
+        try {
+            result = method.invoke(classObject);
         } catch (InvocationTargetException e) {
             logger.error(e.getMessage());
         } catch (IllegalAccessException e) {

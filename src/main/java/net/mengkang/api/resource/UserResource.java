@@ -8,7 +8,11 @@ import net.mengkang.api.service.UserService;
 
 public class UserResource extends BaseResource {
 
-    public Object get(ApiProtocol apiProtocol) {
+    public UserResource(ApiProtocol apiProtocol) {
+        super(apiProtocol);
+    }
+
+    public Object get() {
 
         int uid;
 
@@ -20,8 +24,21 @@ public class UserResource extends BaseResource {
         }
 
         UserService userService = new UserService(apiProtocol);
-        UserInfo userInfo    = new UserInfo(userService.get(uid));
+        UserInfo    userInfo    = new UserInfo(userService.get(uid));
 
         return new Result<Info>(userInfo);
     }
+
+    public Object post() {
+        return success();
+    }
+
+    public Object patch() {
+        return success();
+    }
+
+    public Object delete() {
+        return success();
+    }
+
 }

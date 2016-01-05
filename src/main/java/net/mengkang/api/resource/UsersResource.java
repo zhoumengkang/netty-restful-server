@@ -11,7 +11,11 @@ import java.util.List;
 
 public class UsersResource extends BaseResource {
 
-    public Object get(ApiProtocol apiProtocol) {
+    public UsersResource(ApiProtocol apiProtocol) {
+        super(apiProtocol);
+    }
+
+    public Object get() {
 
         ListInfo   info       = new ListInfo();
         ListResult listResult = new ListResult(info);

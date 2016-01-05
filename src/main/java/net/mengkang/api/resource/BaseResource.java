@@ -13,8 +13,11 @@ public class BaseResource {
 
     protected Logger logger;
 
-    public BaseResource() {
-        logger = LoggerFactory.getLogger(this.getClass());
+    protected ApiProtocol apiProtocol;
+
+    public BaseResource(ApiProtocol apiProtocol) {
+        this.logger = LoggerFactory.getLogger(this.getClass());;
+        this.apiProtocol = apiProtocol;
     }
 
     public Object parameterIntCheck(ApiProtocol apiProtocol, String parameter) {
