@@ -1,7 +1,6 @@
 package net.mengkang.api.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import net.mengkang.api.resource.BaseResource;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +27,12 @@ public class ApiHandler {
         ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
         if (apiProtocol.getApi() == null) {
-            return encode(BaseResource.error(BaseResource.API_CAN_NOT_BE_NULL));
+            return encode(ApiErrorHandler.error(ApiErrorHandler.API_CAN_NOT_BE_NULL));
         }
 
         Object result = invoke(apiProtocol.getApi(), apiProtocol);
         if (result == null) {
-            return encode(BaseResource.error(BaseResource.UNKNOWN_ERROR));
+            return encode(ApiErrorHandler.error(ApiErrorHandler.UNKNOWN_ERROR));
         }
 
         return encode(result);
@@ -54,15 +53,15 @@ public class ApiHandler {
 
         Api api = ApiRoute.apiMap.get(apiName);
         if (api == null) {
-            return BaseResource.error(BaseResource.API_NOT_FOUND);
+            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
         }
 
         if (apiProtocol.getBuild() < api.getBuild()){
-            return BaseResource.error(BaseResource.VERSION_IS_TOO_LOW);
+            return ApiErrorHandler.error(ApiErrorHandler.VERSION_IS_TOO_LOW);
         }
 
         if(api.getHttpMethod() != null && !api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
-            return BaseResource.error(BaseResource.REQUEST_MODE_ERROR);
+            return ApiErrorHandler.error(ApiErrorHandler.REQUEST_MODE_ERROR);
         }
 
         try {
@@ -70,20 +69,20 @@ public class ApiHandler {
             classObject = classname.newInstance();
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
-            return BaseResource.error(BaseResource.API_NOT_FOUND);
+            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
         } catch (InstantiationException e) {
             logger.error(e.getMessage());
-            return BaseResource.error(BaseResource.API_NOT_FOUND);
+            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
         } catch (IllegalAccessException e) {
             logger.error(e.getMessage());
-            return BaseResource.error(BaseResource.API_NOT_FOUND);
+            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
         }
 
         try {
             method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase(), ApiProtocol.class);
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
-            return BaseResource.error(BaseResource.API_NOT_FOUND);
+            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
         }
 
         try {

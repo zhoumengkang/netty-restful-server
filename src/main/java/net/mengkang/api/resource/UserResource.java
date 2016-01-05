@@ -1,5 +1,6 @@
 package net.mengkang.api.resource;
 
+import net.mengkang.api.handler.ApiErrorHandler;
 import net.mengkang.api.vo.Info;
 import net.mengkang.api.vo.ListInfo;
 import net.mengkang.api.vo.ListResult;
@@ -48,10 +49,10 @@ public class UserResource extends BaseResource {
                 uid = Integer.parseInt(apiProtocol.getParameters().get("uid").get(0));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                return error(PARAM_FORMAT_ERROR, "uid");
+                return ApiErrorHandler.error(ApiErrorHandler.PARAM_FORMAT_ERROR, "uid");
             }
         } else {
-            return error(PARAM_CAN_NOT_BE_NULL, "uid");
+            return ApiErrorHandler.error(ApiErrorHandler.PARAM_CAN_NOT_BE_NULL, "uid");
         }
 
         UserService userService = new UserService(apiProtocol);
