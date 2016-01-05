@@ -1,16 +1,18 @@
 # netty-restful-server
 
-A light and high performance restful server build on netty. If you are preparing for leaning java or netty, it's a nice gift for you.
+A light and high performance restful server built on netty. If you are preparing for leaning java or netty, it's a nice gift for you.
 
 ### Preview
 
-project demo can be visited home:
+project demo can be visited here:
 
 1. get user info api
-[http://netty.restful.api.mengkang.net/user/1](http://netty.restful.api.mengkang.net/user/1)
+
+GET   [http://netty.restful.api.mengkang.net/user/1](http://netty.restful.api.mengkang.net/user/1)
 
 2. get user album info
-[http://netty.restful.api.mengkang.net/user/1/album/10?build=103](http://netty.restful.api.mengkang.net/user/1/album/10?build=103)
+
+GET   [http://netty.restful.api.mengkang.net/user/1/album/10?build=103](http://netty.restful.api.mengkang.net/user/1/album/10?build=103)
 
 
 ### Version 1.0.0
