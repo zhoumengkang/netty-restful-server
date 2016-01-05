@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
     <api>
-        <name>/user/uid</name>
-        <regex>/user/(\d+)</regex>
+        <name>/user/:uid</name>
         <method>get</method>
         <method>post</method>
         <method>put</method>
@@ -11,8 +10,7 @@
         <build>101</build>
     </api>
     <api>
-        <name>/user/uid/album/aid</name>
-        <regex>/user/(\d+)/album/(\d+)</regex>
+        <name>/user/:uid/album/:aid</name>
         <method>get</method>
         <method>post</method>
         <resource>AlbumResource</resource>

@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class Api {
 
-    private String       name;
+    private String       name;  // endpoint
     private String       regex;
     private List<String> parameterNames;
     private Set<String>  httpMethod;
@@ -32,6 +32,24 @@ public class Api {
 
     public void setName(String name) {
         this.name = name;
+
+        String[]      strings       = name.split("/");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0, len = strings.length; i < len; i++) {
+            if (strings[i].length() == 0) {
+                continue;
+            }
+            stringBuilder.append("/");
+            if (strings[i].startsWith(":")) {
+                parameterNames.add(strings[i].substring(1));
+                stringBuilder.append("(.*)");
+            } else {
+                stringBuilder.append(strings[i]);
+            }
+        }
+
+        this.regex = stringBuilder.toString();
     }
 
     public Set<String> getHttpMethod() {
@@ -60,18 +78,5 @@ public class Api {
 
     public String getRegex() {
         return regex;
-    }
-
-    public void setRegex(String regex) {
-        this.regex = regex;
-        String[] names = this.name.split("/");
-        String[] strings = regex.split("/");
-        if (names.length == strings.length) {
-            for (int i = 0; i < strings.length; i++) {
-                if (strings[i].startsWith("(") && strings[i].endsWith(")")) {
-                    parameterNames.add(names[i]);
-                }
-            }
-        }
     }
 }

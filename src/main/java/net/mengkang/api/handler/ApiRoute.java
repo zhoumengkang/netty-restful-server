@@ -57,9 +57,6 @@ public class ApiRoute {
                             case apiName:
                                 api.setName(value);
                                 break;
-                            case apiRegex:
-                                api.setRegex(value);
-                                break;
                             case apiHttpMethod:
                                 api.addHttpMethod(value);
                                 break;

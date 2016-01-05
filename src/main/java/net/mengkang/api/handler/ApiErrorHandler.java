@@ -6,9 +6,7 @@ import net.mengkang.api.vo.Result;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by zhoumengkang on 5/1/16.
- */
+
 public class ApiErrorHandler {
     public static final Map<Integer, String> errors = new HashMap<>();
 
