@@ -1,4 +1,4 @@
-package net.mengkang.api.vo;
+package net.mengkang.api.response;
 
 public class Result<T extends Info> {
 

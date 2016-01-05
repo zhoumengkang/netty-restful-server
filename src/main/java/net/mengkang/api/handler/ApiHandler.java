@@ -1,6 +1,7 @@
 package net.mengkang.api.handler;
 
 import io.netty.channel.ChannelHandlerContext;
+import net.mengkang.api.response.ResponseHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,12 @@ public class ApiHandler {
         ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
         if (apiProtocol.getApi() == null) {
-            return encode(ApiErrorHandler.error(ApiErrorHandler.API_CAN_NOT_BE_NULL));
+            return encode(ResponseHandler.error(ResponseHandler.API_CAN_NOT_BE_NULL));
         }
 
         Object result = invoke(apiProtocol.getApi(), apiProtocol);
         if (result == null) {
-            return encode(ApiErrorHandler.error(ApiErrorHandler.UNKNOWN_ERROR));
+            return encode(ResponseHandler.error(ResponseHandler.UNKNOWN_ERROR));
         }
 
         return encode(result);
@@ -53,15 +54,15 @@ public class ApiHandler {
 
         Api api = ApiRoute.apiMap.get(apiName);
         if (api == null) {
-            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
         }
 
         if (apiProtocol.getBuild() < api.getBuild()){
-            return ApiErrorHandler.error(ApiErrorHandler.VERSION_IS_TOO_LOW);
+            return ResponseHandler.error(ResponseHandler.VERSION_IS_TOO_LOW);
         }
 
         if(api.getHttpMethod() != null && !api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
-            return ApiErrorHandler.error(ApiErrorHandler.REQUEST_MODE_ERROR);
+            return ResponseHandler.error(ResponseHandler.REQUEST_MODE_ERROR);
         }
 
         try {
@@ -69,20 +70,20 @@ public class ApiHandler {
             classObject = classname.newInstance();
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
-            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
         } catch (InstantiationException e) {
             logger.error(e.getMessage());
-            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
         } catch (IllegalAccessException e) {
             logger.error(e.getMessage());
-            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
         }
 
         try {
             method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase(), ApiProtocol.class);
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
-            return ApiErrorHandler.error(ApiErrorHandler.API_NOT_FOUND);
+            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
         }
 
         try {

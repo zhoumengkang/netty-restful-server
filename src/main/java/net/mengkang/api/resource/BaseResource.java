@@ -1,14 +1,10 @@
 package net.mengkang.api.resource;
 
-import net.mengkang.api.handler.ApiErrorHandler;
+import net.mengkang.api.response.ResponseHandler;
 import net.mengkang.api.handler.ApiProtocol;
-import net.mengkang.api.vo.Info;
-import net.mengkang.api.vo.Result;
+import net.mengkang.api.response.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * api resource base method
@@ -21,16 +17,33 @@ public class BaseResource {
         logger = LoggerFactory.getLogger(this.getClass());
     }
 
-    public static Object parameterIntCheck(ApiProtocol apiProtocol,String parameter){
+    public Object parameterIntCheck(ApiProtocol apiProtocol, String parameter) {
         if (apiProtocol.getParameters().containsKey(parameter)) {
             try {
                 return Integer.parseInt(apiProtocol.getParameters().get(parameter).get(0));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                return ApiErrorHandler.error(ApiErrorHandler.PARAM_FORMAT_ERROR, parameter);
+                return error(ResponseHandler.PARAM_FORMAT_ERROR, parameter);
             }
         } else {
-            return ApiErrorHandler.error(ApiErrorHandler.PARAM_CAN_NOT_BE_NULL, parameter);
+            return error(ResponseHandler.PARAM_CAN_NOT_BE_NULL, parameter);
         }
     }
+
+    protected Object error(int code) {
+        return ResponseHandler.error(code);
+    }
+
+    protected Result error(int code, String parameter) {
+        return ResponseHandler.error(code, parameter);
+    }
+
+    protected Result success() {
+        return ResponseHandler.success();
+    }
+
+    protected Result success(int code) {
+        return ResponseHandler.success(code);
+    }
+
 }

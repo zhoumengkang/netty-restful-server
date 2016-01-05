@@ -1,4 +1,4 @@
-package net.mengkang.api.vo;
+package net.mengkang.api.response;
 
 import net.mengkang.api.entity.BaseEntity;
 

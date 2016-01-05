@@ -16,4 +16,10 @@
         <resource>AlbumResource</resource>
         <build>102</build>
     </api>
+    <api>
+        <name>/users</name>
+        <method>get</method>
+        <resource>UsersResource</resource>
+        <build>102</build>
+    </api>
 </routeMap>

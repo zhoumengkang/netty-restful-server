@@ -1,29 +1,12 @@
 package net.mengkang.api.resource;
 
-import net.mengkang.api.entity.Album;
+import net.mengkang.api.bo.AlbumInfo;
 import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.service.AlbumService;
-import net.mengkang.api.vo.Info;
-import net.mengkang.api.vo.Result;
+import net.mengkang.api.response.Info;
+import net.mengkang.api.response.Result;
 
 public class AlbumResource extends BaseResource {
-
-    public class AlbumInfo extends Info {
-        private Album album;
-
-        public Album getAlbum() {
-            return album;
-        }
-
-        public void setAlbum(Album album) {
-            this.album = album;
-        }
-
-        public AlbumInfo(Album album) {
-            this.album = album;
-        }
-    }
-
 
     public Object get(ApiProtocol apiProtocol) {
 
