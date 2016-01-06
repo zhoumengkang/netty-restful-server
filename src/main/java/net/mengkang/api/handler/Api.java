@@ -43,7 +43,7 @@ public class Api {
             stringBuilder.append("/");
             if (strings[i].startsWith(":")) {
                 parameterNames.add(strings[i].substring(1));
-                stringBuilder.append("([^/])");
+                stringBuilder.append("([^/]+)");
             } else {
                 stringBuilder.append(strings[i]);
             }
