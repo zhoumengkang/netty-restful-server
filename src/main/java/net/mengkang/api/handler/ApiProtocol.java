@@ -3,6 +3,7 @@ package net.mengkang.api.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.MixedAttribute;
@@ -119,7 +120,7 @@ public class ApiProtocol {
         this.method = req.method();
 
         parseEndpoint(uri);
-        setClientIpAndServerIp(ctx, req);
+        setIp(ctx, req);
         queryStringHandler(uri);
         requestParametersHandler(req);
         requestBodyHandler(msg);
@@ -160,7 +161,7 @@ public class ApiProtocol {
 
     }
 
-    private void setClientIpAndServerIp(ChannelHandlerContext ctx, HttpRequest req) {
+    private void setIp(ChannelHandlerContext ctx, HttpRequest req) {
         String clientIP = (String) req.headers().get("X-Forwarded-For");
         if (clientIP == null) {
             InetSocketAddress remoteSocket = (InetSocketAddress) ctx.channel().remoteAddress();
