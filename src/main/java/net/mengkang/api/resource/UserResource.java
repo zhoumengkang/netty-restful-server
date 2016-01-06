@@ -30,15 +30,15 @@ public class UserResource extends BaseResource {
     }
 
     public Object post() {
-        return success();
+        return success(201);
     }
 
     public Object patch() {
-        return success();
+        return success(202);
     }
 
     public Object delete() {
-        return success();
+        return success(203);
     }
 
 }

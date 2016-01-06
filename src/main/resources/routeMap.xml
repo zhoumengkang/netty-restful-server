@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routeMap>
     <api>
+        <name>/user</name>
+        <method>post</method>
+        <resource>UserResource</resource>
+    </api>
+    <api>
         <name>/user/:uid</name>
         <method>get</method>
-        <method>post</method>
-        <method>put</method>
         <method>patch</method>
+        <method>delete</method>
         <resource>UserResource</resource>
         <build>101</build>
     </api>

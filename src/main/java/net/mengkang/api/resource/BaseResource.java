@@ -25,7 +25,7 @@ public class BaseResource {
             try {
                 return Integer.parseInt(apiProtocol.getParameters().get(parameter).get(0));
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
                 return error(ResponseHandler.PARAM_FORMAT_ERROR, parameter);
             }
         } else {

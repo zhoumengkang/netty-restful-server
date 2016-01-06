@@ -24,7 +24,6 @@ public class ApiRoute {
 
     private static final String apiNode           = "api";
     private static final String apiName           = "name";
-    private static final String apiRegex          = "regex";
     private static final String apiHttpMethod     = "method";
     private static final String apiResource       = "resource";
     private static final String apiBuild          = "build";

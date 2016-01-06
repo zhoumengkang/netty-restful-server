@@ -149,13 +149,14 @@ public class ApiProtocol {
             Api api = entry.getValue();
             Pattern pattern = Pattern.compile("^" + api.getRegex() + "$");
             Matcher matcher = pattern.matcher(endpoint);
-            while (matcher.find()) {
+            if (matcher.find()) {
                 this.api = api.getName();
                 if (matcher.groupCount() > 0) {
                     for (int i = 0; i < matcher.groupCount(); i++) {
                         addParameter(api.getParameterNames().get(i), matcher.group(i + 1));
                     }
                 }
+                break;
             }
         }
 
