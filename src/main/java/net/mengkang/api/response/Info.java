@@ -1,8 +1,8 @@
 package net.mengkang.api.response;
 
 public class Info {
-    private int     code    = 200;
-    private String errorMessage;
+    private int code = 200;
+    private String codeMessage;
 
     public int getCode() {
         return code;
@@ -13,11 +13,11 @@ public class Info {
         return this;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getCodeMessage() {
+        return codeMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setCodeMessage(String codeMessage) {
+        this.codeMessage = codeMessage;
     }
 }

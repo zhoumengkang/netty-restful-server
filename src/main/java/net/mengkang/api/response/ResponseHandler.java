@@ -13,6 +13,8 @@ public class ResponseHandler {
 
     private static final Map<Integer, String> codeMap = new HashMap<>();
 
+
+    public static final int CREATED_SUCCESS       = 201;
     public static final int UNKNOWN_ERROR         = 1000;
     public static final int API_NOT_FOUND         = 1001;
     public static final int API_CAN_NOT_BE_NULL   = 1002;
@@ -23,6 +25,7 @@ public class ResponseHandler {
     public static final int API_SERVER_ERROR      = 1007;
 
     static {
+        codeMap.put(CREATED_SUCCESS, "created success");
         codeMap.put(UNKNOWN_ERROR, "unknown error");
         codeMap.put(API_NOT_FOUND, "the api can't be found");
         codeMap.put(API_CAN_NOT_BE_NULL, "can't request without a api name");
@@ -34,9 +37,7 @@ public class ResponseHandler {
     }
 
     public static Object error(int errorCode) {
-        Result result = new Result<>(new Info());
-        result.getInfo().setCode(errorCode).setErrorMessage(codeMap.get(errorCode));
-        return result;
+        return response(errorCode);
     }
 
     /**
@@ -49,7 +50,7 @@ public class ResponseHandler {
         Result result = new Result<>(new Info());
         result.getInfo()
                 .setCode(errorCode)
-                .setErrorMessage(String.format(codeMap.get(errorCode), parameter));
+                .setCodeMessage(String.format(codeMap.get(errorCode), parameter));
         return result;
     }
 
@@ -57,9 +58,13 @@ public class ResponseHandler {
         return new Result<>(new Info());
     }
 
-    public static Result success(int code){
+    public static Object success(int code){
+        return response(code);
+    }
+
+    public static Object response(int code) {
         Result result = new Result<>(new Info());
-        result.getInfo().setCode(code);
+        result.getInfo().setCode(code).setCodeMessage(codeMap.get(code));
         return result;
     }
 }
