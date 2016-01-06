@@ -45,7 +45,7 @@ public class BaseResource {
         return ResponseHandler.success();
     }
 
-    protected Result success(int code) {
+    protected Object success(int code) {
         return ResponseHandler.success(code);
     }
 

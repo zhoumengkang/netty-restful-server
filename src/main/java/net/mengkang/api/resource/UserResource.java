@@ -1,7 +1,9 @@
 package net.mengkang.api.resource;
 
+import net.mengkang.api.bo.UserCreateSuccess;
 import net.mengkang.api.bo.UserInfo;
 import net.mengkang.api.response.Info;
+import net.mengkang.api.response.ResponseHandler;
 import net.mengkang.api.response.Result;
 import net.mengkang.api.handler.ApiProtocol;
 import net.mengkang.api.service.UserService;
@@ -30,7 +32,11 @@ public class UserResource extends BaseResource {
     }
 
     public Object post() {
-        return success(201);
+        UserCreateSuccess userCreateSuccess = new UserCreateSuccess();
+        userCreateSuccess.setId(2);
+        userCreateSuccess.setUrl("http://netty.restful.api.mengkang.net/user/2");
+        userCreateSuccess.setCode(ResponseHandler.CREATED_SUCCESS);
+        return new Result<>(userCreateSuccess);
     }
 
     public Object patch() {
