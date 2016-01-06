@@ -18,7 +18,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         // add gizp compressor for http response content
         p.addLast(new HttpContentCompressor());
 
-//        p.addLast(new HttpObjectAggregator(1048576));
+        p.addLast(new HttpObjectAggregator(1048576));
 
         p.addLast(new ChunkedWriteHandler());
 

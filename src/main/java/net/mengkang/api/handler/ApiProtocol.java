@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class ApiProtocol {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiProtocol.class);
 
     private int                       build      = 101;
     private String                    appVersion = "1.0";
