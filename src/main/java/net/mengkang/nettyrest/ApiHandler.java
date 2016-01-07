@@ -71,7 +71,7 @@ public class ApiHandler {
         }
 
         try {
-            classname = Class.forName("net.mengkang.demo.resource." + api.getResource());
+            classname = Class.forName(Config.getString("resource.package.name") + "." + api.getResource());
             constructor = classname.getConstructor(ApiProtocol.class);
             classObject = constructor.newInstance(apiProtocol);
         } catch (NoSuchMethodException e) {

@@ -1,5 +1,6 @@
 package net.mengkang.demo;
 
+import net.mengkang.nettyrest.Config;
 import net.mengkang.nettyrest.netty.NettyRestServer;
 
 /**
@@ -8,6 +9,7 @@ import net.mengkang.nettyrest.netty.NettyRestServer;
 public class ServerLauncher {
     public static void main(String[] args) {
         NettyRestServer nettyRestServer = new NettyRestServer();
-        nettyRestServer.start(8080);
+        int port = Config.getInt("server.port");
+        nettyRestServer.start(port);
     }
 }
