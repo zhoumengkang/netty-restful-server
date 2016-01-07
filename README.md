@@ -23,7 +23,7 @@ At first, java 8 should be supported in your server.
 
 There's two way to run it.
 
-1 . Run `net.mengkang.netty.Server` in Intellij IDEA, Then you can visit 
+1 . Run `net.mengkang.nettyrest.netty.Server` in Intellij IDEA, Then you can visit 
 
 > [http://localhost:8080/user/1](http://localhost:8080/user/1) 
 
