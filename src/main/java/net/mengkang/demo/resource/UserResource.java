@@ -2,8 +2,8 @@ package net.mengkang.demo.resource;
 
 import net.mengkang.demo.bo.UserCreateSuccess;
 import net.mengkang.demo.bo.UserInfo;
+import net.mengkang.nettyrest.StatusCode;
 import net.mengkang.nettyrest.vo.Info;
-import net.mengkang.nettyrest.ResponseHandler;
 import net.mengkang.nettyrest.vo.Result;
 import net.mengkang.nettyrest.ApiProtocol;
 import net.mengkang.demo.service.UserService;
@@ -36,7 +36,7 @@ public class UserResource extends BaseResource {
         UserCreateSuccess userCreateSuccess = new UserCreateSuccess();
         userCreateSuccess.setId(2);
         userCreateSuccess.setUrl("http://netty.restful.api.mengkang.net/user/2");
-        userCreateSuccess.setCode(ResponseHandler.CREATED_SUCCESS);
+        userCreateSuccess.setCode(StatusCode.CREATED_SUCCESS);
         return new Result<>(userCreateSuccess);
     }
 

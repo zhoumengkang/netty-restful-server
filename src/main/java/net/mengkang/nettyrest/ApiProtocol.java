@@ -24,7 +24,7 @@ public class ApiProtocol {
     private static final Logger logger = LoggerFactory.getLogger(ApiProtocol.class);
 
     private int                       build      = 101;
-    private String                    appVersion = "1.0";
+    private String                    version    = "1.0";
     private String                    channel    = "mengkang.net";
     private String                    geo        = null;
     private String                    clientIP   = null;
@@ -42,8 +42,8 @@ public class ApiProtocol {
         return build;
     }
 
-    public String getAppVersion() {
-        return appVersion;
+    public String getVersion() {
+        return version;
     }
 
     public String getChannel() {

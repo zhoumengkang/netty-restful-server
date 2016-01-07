@@ -28,16 +28,16 @@ public class ApiHandler {
         ApiProtocol apiProtocol = new ApiProtocol(ctx, msg);
 
         if (apiProtocol.getEndpoint() == null) {
-            return encode(ResponseHandler.error(ResponseHandler.API_CAN_NOT_BE_NULL));
+            return encode(ErrorHandler.error(StatusCode.API_CAN_NOT_BE_NULL));
         }
 
         if (apiProtocol.getApi() == null) {
-            return encode(ResponseHandler.error(ResponseHandler.API_NOT_FOUND));
+            return encode(ErrorHandler.error(StatusCode.API_NOT_FOUND));
         }
 
         Object result = invoke(apiProtocol.getApi(), apiProtocol);
         if (result == null) {
-            return encode(ResponseHandler.error(ResponseHandler.UNKNOWN_ERROR));
+            return encode(ErrorHandler.error(StatusCode.UNKNOWN_ERROR));
         }
 
         return encode(result);
@@ -59,15 +59,15 @@ public class ApiHandler {
 
         Api api = ApiRoute.apiMap.get(apiName);
         if (api == null) {
-            return ResponseHandler.error(ResponseHandler.API_NOT_FOUND);
+            return ErrorHandler.error(StatusCode.API_NOT_FOUND);
         }
 
         if (apiProtocol.getBuild() < api.getBuild()){
-            return ResponseHandler.error(ResponseHandler.VERSION_IS_TOO_LOW);
+            return ErrorHandler.error(StatusCode.VERSION_IS_TOO_LOW);
         }
 
         if(api.getHttpMethod() != null && !api.getHttpMethod().contains(apiProtocol.getMethod().toString().toLowerCase())){
-            return ResponseHandler.error(ResponseHandler.REQUEST_MODE_ERROR);
+            return ErrorHandler.error(StatusCode.REQUEST_MODE_ERROR);
         }
 
         try {
@@ -76,26 +76,26 @@ public class ApiHandler {
             classObject = constructor.newInstance(apiProtocol);
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         } catch (InvocationTargetException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         } catch (InstantiationException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         } catch (IllegalAccessException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         }
 
         try {
             method = classname.getMethod(apiProtocol.getMethod().toString().toLowerCase());
         } catch (NoSuchMethodException e) {
             logger.error(e.getMessage());
-            return ResponseHandler.error(ResponseHandler.API_SERVER_ERROR);
+            return ErrorHandler.error(StatusCode.API_SERVER_ERROR);
         }
 
         try {
