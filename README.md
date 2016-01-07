@@ -1,6 +1,5 @@
 # netty-restful-server
 [![Build Status](https://travis-ci.org/zhoumengkang/netty-restful-server.svg?branch=master)](https://travis-ci.org/zhoumengkang/netty-restful-server)
-[![Coverage Status](https://coveralls.io/repos/zhoumengkang/netty-restful-server/badge.svg?branch=master&service=github)](https://coveralls.io/github/zhoumengkang/netty-restful-server?branch=master)
 
 A light and high performance restful server built on netty. If you are preparing for leaning java or netty, it's a nice gift for you.
 
