@@ -35,7 +35,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>net.mengkang.nettyrest.netty.NettyRestServer</mainClass>
+                            <mainClass>net.mengkang.demo.ServerLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
