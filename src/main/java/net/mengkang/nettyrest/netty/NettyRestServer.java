@@ -8,11 +8,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import net.mengkang.nettyrest.Config;
 
 
 public final class NettyRestServer {
 
-    public void start(int port) {
+    public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -23,7 +24,7 @@ public final class NettyRestServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ServerInitializer());
 
-            Channel ch = b.bind(port).sync().channel();
+            Channel ch = b.bind(Config.getInt("server.port")).sync().channel();
 
             ch.closeFuture().sync();
         } catch (InterruptedException e) {
