@@ -4,8 +4,8 @@ package net.mengkang.demo.resource;
 import net.mengkang.demo.entity.User;
 import net.mengkang.nettyrest.ApiProtocol;
 import net.mengkang.demo.service.UserService;
-import net.mengkang.nettyrest.vo.ListInfo;
-import net.mengkang.nettyrest.vo.ListResult;
+import net.mengkang.nettyrest.response.ListInfo;
+import net.mengkang.nettyrest.response.ListResult;
 import net.mengkang.nettyrest.BaseResource;
 
 import java.util.List;

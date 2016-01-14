@@ -1,6 +1,6 @@
 package net.mengkang.demo.bo;
 
-import net.mengkang.nettyrest.vo.Info;
+import net.mengkang.nettyrest.response.Info;
 
 /**
  * Created by zhoumengkang on 6/1/16.

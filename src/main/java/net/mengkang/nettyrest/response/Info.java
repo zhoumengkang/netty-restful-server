@@ -1,4 +1,4 @@
-package net.mengkang.nettyrest.vo;
+package net.mengkang.nettyrest.response;
 
 public class Info {
     private int code = 200;

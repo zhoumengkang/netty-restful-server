@@ -1,7 +1,7 @@
 package net.mengkang.demo.bo;
 
 import net.mengkang.demo.entity.User;
-import net.mengkang.nettyrest.vo.Info;
+import net.mengkang.nettyrest.response.Info;
 
 /**
  * Created by zhoumengkang on 5/1/16.

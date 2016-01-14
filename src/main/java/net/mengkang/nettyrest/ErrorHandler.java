@@ -1,12 +1,9 @@
 package net.mengkang.nettyrest;
 
-import net.mengkang.nettyrest.vo.Info;
-import net.mengkang.nettyrest.vo.Result;
+import net.mengkang.nettyrest.response.Info;
+import net.mengkang.nettyrest.response.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class ErrorHandler {

@@ -3,8 +3,8 @@ package net.mengkang.demo.resource;
 import net.mengkang.demo.bo.AlbumInfo;
 import net.mengkang.nettyrest.ApiProtocol;
 import net.mengkang.demo.service.AlbumService;
-import net.mengkang.nettyrest.vo.Info;
-import net.mengkang.nettyrest.vo.Result;
+import net.mengkang.nettyrest.response.Info;
+import net.mengkang.nettyrest.response.Result;
 import net.mengkang.nettyrest.BaseResource;
 
 public class AlbumResource extends BaseResource {
