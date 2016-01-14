@@ -15,13 +15,13 @@ public class UserResource extends BaseResource {
         super(apiProtocol);
     }
 
-    public Object get() {
+    public Result get() {
 
         int uid;
 
         Object uidCheck = parameterIntCheck(apiProtocol, "uid");
         if (uidCheck instanceof Result) {
-            return uidCheck;
+            return (Result) uidCheck;
         } else {
             uid = (int) uidCheck;
         }
@@ -32,7 +32,7 @@ public class UserResource extends BaseResource {
         return new Result<Info>(userInfo);
     }
 
-    public Object post() {
+    public Result post() {
         UserCreateSuccess userCreateSuccess = new UserCreateSuccess();
         userCreateSuccess.setId(2);
         userCreateSuccess.setUrl("http://netty.restful.api.mengkang.net/user/2");
@@ -40,11 +40,11 @@ public class UserResource extends BaseResource {
         return new Result<>(userCreateSuccess);
     }
 
-    public Object patch() {
+    public Result patch() {
         return success(202);
     }
 
-    public Object delete() {
+    public Result delete() {
         return success(203);
     }
 

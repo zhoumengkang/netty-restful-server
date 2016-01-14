@@ -13,20 +13,20 @@ public class AlbumResource extends BaseResource {
         super(apiProtocol);
     }
 
-    public Object get() {
+    public Result get() {
 
         int uid, aid;
 
         Object uidCheck = parameterIntCheck(apiProtocol, "uid");
         if (uidCheck instanceof Result) {
-            return uidCheck;
+            return (Result) uidCheck;
         } else {
             uid = (int) uidCheck;
         }
 
         Object aidCheck = parameterIntCheck(apiProtocol,"aid");
         if (aidCheck instanceof Result){
-            return aidCheck;
+            return (Result) aidCheck;
         }else {
             aid = (int) aidCheck;
         }

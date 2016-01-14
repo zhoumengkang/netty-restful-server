@@ -7,6 +7,7 @@ import net.mengkang.demo.service.UserService;
 import net.mengkang.nettyrest.response.ListInfo;
 import net.mengkang.nettyrest.response.ListResult;
 import net.mengkang.nettyrest.BaseResource;
+import net.mengkang.nettyrest.response.Result;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class UsersResource extends BaseResource {
         super(apiProtocol);
     }
 
-    public Object get() {
+    public Result get() {
 
         ListInfo   info       = new ListInfo();
         ListResult listResult = new ListResult(info);
