@@ -10,7 +10,7 @@ public class ErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(StatusCode.class);
 
-    public static Object error(int errorCode) {
+    public static Result error(int errorCode) {
         Result result = new Result<>(new Info());
         result.getInfo().setCode(errorCode).setCodeMessage(StatusCode.codeMap.get(errorCode));
         return result;

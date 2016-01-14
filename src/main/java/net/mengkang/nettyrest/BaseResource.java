@@ -32,7 +32,7 @@ public class BaseResource {
         }
     }
 
-    protected Object error(int code) {
+    protected Result error(int code) {
         return ErrorHandler.error(code);
     }
 
