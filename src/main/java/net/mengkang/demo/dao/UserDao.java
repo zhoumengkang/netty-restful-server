@@ -1,5 +1,7 @@
 package net.mengkang.demo.dao;
 
+import net.mengkang.demo.entity.User;
+import net.mengkang.nettyrest.mysql.MySelect;
 import net.mengkang.nettyrest.mysql.Mysql;
 
 public class UserDao {
@@ -16,4 +18,10 @@ public class UserDao {
         String sql = "select name from user where id=?";
         return Mysql.getValue(sql,id);
     }
+
+    public User getOne(int id){
+        String sql = "select id,name from user where id=?";
+        return new MySelect<User>().get(sql,id);
+    }
+
 }

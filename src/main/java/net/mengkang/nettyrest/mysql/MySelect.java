@@ -1,5 +1,8 @@
 package net.mengkang.nettyrest.mysql;
 
+import net.mengkang.nettyrest.mysql.DMLTypes;
+import net.mengkang.nettyrest.mysql.JdbcPool;
+import net.mengkang.nettyrest.mysql.Mysql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,26 +13,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by zhoumengkang on 16/1/16.
- */
-public class MySelect<A> extends Mysql{
+
+public class MySelect<A> extends Mysql {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public A get(String sql,A bean, Object... params){
+    public A get(String sql, Object... params) {
 
-        grammarCheck(sql,DMLTypes.SELECT);
-        int paramSize = getParameterNum(sql,params);
+        grammarCheck(sql, DMLTypes.SELECT);
+        int paramSize = getParameterNum(sql, params);
 
-        Connection        conn = null;
+        Connection        conn      = null;
         PreparedStatement statement = null;
         ResultSet         resultSet = null;
+
         try {
             conn = JdbcPool.getReadConnection();
             statement = conn.prepareStatement(sql);
 
-            if(paramSize > 0){
+            if (paramSize > 0) {
                 statement = bindParameters(statement, params);
             }
 
@@ -39,34 +41,34 @@ public class MySelect<A> extends Mysql{
                     // todo ...
 
                 }
-            }catch (Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("resultSet error", e);
             }
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            JdbcPool.release(conn,statement,resultSet);
+        } catch (SQLException e) {
+            logger.error("sql error", e);
+        } finally {
+            JdbcPool.release(conn, statement, resultSet);
         }
-        return bean;
+        return null;
     }
 
-    public List<A> list(String sql,A bean, Object... params){
+    public List<A> list(String sql, A bean, Object... params) {
         List<A> beanList = new ArrayList<>();
         beanList.add(bean);
 
         grammarCheck(sql, DMLTypes.SELECT);
         int paramSize = getParameterNum(sql, params);
 
-        Connection        conn = null;
+        Connection        conn      = null;
         PreparedStatement statement = null;
         ResultSet         resultSet = null;
         try {
             conn = JdbcPool.getReadConnection();
             statement = conn.prepareStatement(sql);
 
-            if(paramSize > 0){
-                statement = bindParameters(statement,params);
+            if (paramSize > 0) {
+                statement = bindParameters(statement, params);
             }
 
             resultSet = statement.executeQuery();
@@ -75,14 +77,14 @@ public class MySelect<A> extends Mysql{
                     // todo ...
 
                 }
-            }catch (SQLException e){
-                e.printStackTrace();
+            } catch (SQLException e) {
+                logger.error("resultSet error", e);
             }
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            JdbcPool.release(conn,statement,resultSet);
+        } catch (Exception e) {
+            logger.error("sql error", e);
+        } finally {
+            JdbcPool.release(conn, statement, resultSet);
         }
 
         return beanList;
