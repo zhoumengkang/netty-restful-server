@@ -1,5 +1,6 @@
 package net.mengkang.demo.service;
 
+import net.mengkang.demo.dao.UserDao;
 import net.mengkang.demo.entity.User;
 import net.mengkang.nettyrest.ApiProtocol;
 
@@ -12,7 +13,18 @@ public class UserService extends BaseService{
         super(apiProtocol);
     }
 
+    /**
+     * Version compatibility demo
+     * @param uid
+     * @return
+     */
     public User get(int uid){
+
+        if (apiProtocol.getBuild() > 105){
+
+            System.out.println(new UserDao().getName(uid));
+        }
+
         return new User(uid,"xxx",25);
     }
 

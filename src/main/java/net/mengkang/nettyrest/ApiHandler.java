@@ -101,6 +101,7 @@ public class ApiHandler {
         try {
             result = method.invoke(classObject);
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
             logger.error(e.getMessage());
         } catch (IllegalAccessException e) {
             logger.error(e.toString());
