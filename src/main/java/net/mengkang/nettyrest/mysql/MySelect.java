@@ -15,8 +15,24 @@ public class MySelect<A> extends Mysql {
 
     private A bean;
 
+    private Map<String, Field> fieldMap = new HashMap<>();
+
     public MySelect(A bean) {
         this.bean = bean;
+        fieldMapInit();
+    }
+
+    private void fieldMapInit() {
+        Class   c      = bean.getClass();
+        Field[] fields = c.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(DbFiled.class)) {
+                fieldMap.put(field.getAnnotation(DbFiled.class).value(), field);
+            } else {
+                fieldMap.put(field.getName(), field);
+            }
+        }
     }
 
     // todo select * xxx
@@ -32,34 +48,6 @@ public class MySelect<A> extends Mysql {
         }
 
         return fields;
-    }
-
-    private List<Map<String, Field>> getSelectFieldMap(String[] selectFields) {
-        int      length       = selectFields.length;
-
-        Class   c        = bean.getClass();
-        Field[] fields   = c.getDeclaredFields();
-        int     fieldNum = fields.length;
-
-        List<Map<String, Field>> fieldMap = new ArrayList<>();
-
-        //todo, inefficient algorithm
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < fieldNum; j++) {
-                Field field = fields[j];
-                if (field.getName().equals(selectFields[i])
-                        || (field.isAnnotationPresent(DbFiled.class)
-                        && field.getAnnotation(DbFiled.class).value().equals(selectFields[i]))
-                ) {
-                    Map<String,Field> oneFieldMap = new HashMap<>();
-                    oneFieldMap.put(selectFields[i],field);
-                    fieldMap.add(oneFieldMap);
-                    break;
-                }
-            }
-        }
-
-        return fieldMap;
     }
 
     public A get(String sql, Object... params) {
@@ -82,11 +70,10 @@ public class MySelect<A> extends Mysql {
             resultSet = statement.executeQuery();
             try {
                 String[] selectFields = parseSelectFields(sql);
-                List<Map<String, Field>> selectFieldMap = getSelectFieldMap(selectFields);
                 if (resultSet.next()){
-                    for (int i = 0; i < selectFieldMap.size(); i++) {
+                    for (int i = 0; i < selectFields.length; i++) {
                         int j = i + 1;
-                        Field field = selectFieldMap.get(i).get(selectFields[i]);
+                        Field field = fieldMap.get(selectFields[i]);
                         field.setAccessible(true);
                         Class fieldClass = field.getType();
                         if (fieldClass == String.class) {
