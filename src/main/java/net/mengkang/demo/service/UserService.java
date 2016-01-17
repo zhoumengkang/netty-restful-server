@@ -24,7 +24,7 @@ public class UserService extends BaseService{
 
             System.out.println(new UserDao().getName(uid));
 
-            new UserDao().getOne(uid);
+            System.out.println(new UserDao().getOne(uid).toString());
         }
 
         return new User(uid,"xxx",25);

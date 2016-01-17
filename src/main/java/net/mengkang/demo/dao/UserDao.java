@@ -22,7 +22,7 @@ public class UserDao {
 
     public UserLite getOne(int id){
         String sql = "select id,name from user where id=?";
-        return new MySelect<UserLite>().get(sql,new UserLite(),id);
+        return new MySelect<>(new UserLite()).get(sql,id);
     }
 
 }

@@ -7,9 +7,9 @@ public class UserLite {
     private int    id;
     private String name;
     private String icon;
-    private char   sex;
+    private int   sex;
     private int    birthday;
-    private char   status;
+    private int   status;
     @DbFiled("register_ts")
     private int    ts;
 
@@ -37,11 +37,11 @@ public class UserLite {
         this.icon = icon;
     }
 
-    public char getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(char sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 
@@ -53,11 +53,11 @@ public class UserLite {
         this.birthday = birthday;
     }
 
-    public char getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(char status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -67,5 +67,18 @@ public class UserLite {
 
     public void setTs(int ts) {
         this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        return "UserLite{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
+                ", status=" + status +
+                ", ts=" + ts +
+                '}';
     }
 }
