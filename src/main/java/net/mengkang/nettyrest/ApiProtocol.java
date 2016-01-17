@@ -205,7 +205,7 @@ public class ApiProtocol {
                     field.set(this, this.parameters.get(fieldName).get(0));
                 }
             } catch (NumberFormatException | IllegalAccessException e) {
-                logger.error("field set error",e);
+                logger.error("field set error", e);
             }
 
             this.parameters.remove(fieldName);
