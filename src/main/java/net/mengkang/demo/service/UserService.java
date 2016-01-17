@@ -23,6 +23,8 @@ public class UserService extends BaseService{
         if (apiProtocol.getBuild() > 105){
 
             System.out.println(new UserDao().getName(uid));
+
+            new UserDao().getOne(uid);
         }
 
         return new User(uid,"xxx",25);

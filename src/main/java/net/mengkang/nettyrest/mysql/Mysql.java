@@ -21,9 +21,15 @@ public class Mysql {
             if (!sql.toLowerCase().startsWith(dmlType)) {
                 throw new Exception(dmlType + " statement needed");
             }
+
+            if(sql.toLowerCase().indexOf("where") < 1){
+                throw new Exception("where statement needed");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+
+
     }
 
     protected static int getParameterNum(String sql, Object... params) {

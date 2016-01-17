@@ -183,38 +183,38 @@ public class ApiProtocol {
 
         for (int i = 0, length = fields.length; i < length; i++) {
             Field field = fields[i];
-            String filedName = field.getName();
+            String fieldName = field.getName();
 
-            if (filedName.equals("logger")
-                    || filedName.equals("method")
-                    || filedName.equals("parameters")
-                    || filedName.equals("postBody")) {
+            if (fieldName.equals("logger")
+                    || fieldName.equals("method")
+                    || fieldName.equals("parameters")
+                    || fieldName.equals("postBody")) {
                 continue;
             }
 
-            if (!this.parameters.containsKey(filedName)) {
+            if (!this.parameters.containsKey(fieldName)) {
                 continue;
             }
 
-            String fieldType = field.getType().getName();
+            Class fieldType = field.getType();
             field.setAccessible(true);
             try {
-                if (fieldType.endsWith("int")) {
-                    field.set(this, Integer.parseInt(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("float")) {
-                    field.set(this, Float.parseFloat(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("long")) {
-                    field.set(this, Long.parseLong(this.parameters.get(filedName).get(0)));
-                } else if (fieldType.endsWith("double")) {
-                    field.set(this, Double.parseDouble(this.parameters.get(filedName).get(0)));
+                if (fieldType == int.class) {
+                    field.set(this, Integer.parseInt(this.parameters.get(fieldName).get(0)));
+                } else if (fieldType == float.class || fieldType == Float.class) {
+                    field.set(this, Float.parseFloat(this.parameters.get(fieldName).get(0)));
+                } else if (fieldType == long.class || fieldType == Long.class) {
+                    field.set(this, Long.parseLong(this.parameters.get(fieldName).get(0)));
+                } else if (fieldType == double.class || fieldType == Double.class) {
+                    field.set(this, Double.parseDouble(this.parameters.get(fieldName).get(0)));
                 } else {
-                    field.set(this, this.parameters.get(filedName).get(0));
+                    field.set(this, this.parameters.get(fieldName).get(0));
                 }
             } catch (NumberFormatException | IllegalAccessException e) {
                 logger.error(e.getMessage());
             }
 
-            this.parameters.remove(filedName);
+            this.parameters.remove(fieldName);
         }
     }
 

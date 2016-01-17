@@ -2,9 +2,7 @@ package net.mengkang.demo.entity;
 
 import net.mengkang.nettyrest.mysql.DbFiled;
 
-/**
- * Created by zhoumengkang on 17/1/16.
- */
+
 public class UserLite {
     private int    id;
     private String name;
