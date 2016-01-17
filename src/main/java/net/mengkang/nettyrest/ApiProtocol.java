@@ -201,17 +201,11 @@ public class ApiProtocol {
             try {
                 if (fieldType == int.class) {
                     field.set(this, Integer.parseInt(this.parameters.get(fieldName).get(0)));
-                } else if (fieldType == float.class || fieldType == Float.class) {
-                    field.set(this, Float.parseFloat(this.parameters.get(fieldName).get(0)));
-                } else if (fieldType == long.class || fieldType == Long.class) {
-                    field.set(this, Long.parseLong(this.parameters.get(fieldName).get(0)));
-                } else if (fieldType == double.class || fieldType == Double.class) {
-                    field.set(this, Double.parseDouble(this.parameters.get(fieldName).get(0)));
                 } else {
                     field.set(this, this.parameters.get(fieldName).get(0));
                 }
             } catch (NumberFormatException | IllegalAccessException e) {
-                logger.error(e.getMessage());
+                logger.error("field set error",e);
             }
 
             this.parameters.remove(fieldName);
