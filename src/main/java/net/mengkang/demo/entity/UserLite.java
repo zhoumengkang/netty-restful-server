@@ -1,6 +1,6 @@
 package net.mengkang.demo.entity;
 
-import net.mengkang.nettyrest.mysql.Filed;
+import net.mengkang.nettyrest.mysql.DbFiled;
 
 /**
  * Created by zhoumengkang on 17/1/16.
@@ -10,9 +10,9 @@ public class UserLite {
     private String name;
     private String icon;
     private char   sex;
-    private int    brithday;
+    private int    birthday;
     private char   status;
-    @Filed("register_ts")
+    @DbFiled("register_ts")
     private int    ts;
 
     public int getId() {
@@ -47,12 +47,12 @@ public class UserLite {
         this.sex = sex;
     }
 
-    public int getBrithday() {
-        return brithday;
+    public int getBirthday() {
+        return birthday;
     }
 
-    public void setBrithday(int brithday) {
-        this.brithday = brithday;
+    public void setBirthday(int birthday) {
+        this.birthday = birthday;
     }
 
     public char getStatus() {
