@@ -13,18 +13,17 @@ public class MySelect<A> extends Mysql {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private A bean;
+    private Class clazz;
 
     private Map<String, Field> fieldMap = new HashMap<>();
 
     public MySelect(A bean) {
-        this.bean = bean;
+        this.clazz = bean.getClass();
         fieldMapInit();
     }
 
     private void fieldMapInit() {
-        Class   c      = bean.getClass();
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
 
         for (Field field : fields) {
             if (field.isAnnotationPresent(DbFiled.class)) {
@@ -68,47 +67,55 @@ public class MySelect<A> extends Mysql {
             }
 
             resultSet = statement.executeQuery();
-            try {
+            if (resultSet.next()){
                 String[] selectFields = parseSelectFields(sql);
-                if (resultSet.next()){
-                    for (int i = 0; i < selectFields.length; i++) {
-                        int j = i + 1;
-                        Field field = fieldMap.get(selectFields[i]);
-                        field.setAccessible(true);
-                        Class fieldClass = field.getType();
-                        if (fieldClass == String.class) {
-                            field.set(bean, resultSet.getString(j));
-                        } else if (fieldClass == int.class || fieldClass == Integer.class) {
-                            field.set(bean, resultSet.getInt(j));
-                        } else if (fieldClass == float.class || fieldClass == Float.class) {
-                            field.set(bean, resultSet.getFloat(j));
-                        } else if (fieldClass == double.class || fieldClass == Double.class) {
-                            field.set(bean, resultSet.getDouble(j));
-                        } else if (fieldClass == long.class || fieldClass == Long.class) {
-                            field.set(bean, resultSet.getLong(j));
-                        } else if (fieldClass == Date.class) {
-                            field.set(bean, resultSet.getDate(j));
-                        }
-                    }
-                }
-
-            } catch (SQLException e) {
-                logger.error("resultSet parse error", e);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                return resultSet(selectFields,resultSet);
             }
-
         } catch (SQLException e) {
             logger.error("sql error", e);
         } finally {
             JdbcPool.release(conn, statement, resultSet);
         }
+        return null;
+    }
+
+    public A resultSet(String[] selectFields,ResultSet resultSet){
+
+        A bean = null;
+
+        try{
+            bean = (A) Class.forName(clazz.getName()).newInstance();
+
+            for (int i = 0; i < selectFields.length; i++) {
+                int j = i + 1;
+                Field field = fieldMap.get(selectFields[i]);
+                field.setAccessible(true);
+                Class fieldClass = field.getType();
+                if (fieldClass == String.class) {
+                    field.set(bean, resultSet.getString(j));
+                } else if (fieldClass == int.class || fieldClass == Integer.class) {
+                    field.set(bean, resultSet.getInt(j));
+                } else if (fieldClass == float.class || fieldClass == Float.class) {
+                    field.set(bean, resultSet.getFloat(j));
+                } else if (fieldClass == double.class || fieldClass == Double.class) {
+                    field.set(bean, resultSet.getDouble(j));
+                } else if (fieldClass == long.class || fieldClass == Long.class) {
+                    field.set(bean, resultSet.getLong(j));
+                } else if (fieldClass == Date.class) {
+                    field.set(bean, resultSet.getDate(j));
+                }
+            }
+        }catch (SQLException e){
+            logger.error("resultSet parse error", e);
+        } catch (IllegalAccessException | ClassNotFoundException | InstantiationException e) {
+            e.printStackTrace();
+        }
         return bean;
     }
 
+
     public List<A> list(String sql, Object... params) {
         List<A> beanList = new ArrayList<>();
-        beanList.add(bean);
 
         grammarCheck(sql, DMLTypes.SELECT);
         int paramSize = getParameterNum(sql, params);
@@ -125,15 +132,10 @@ public class MySelect<A> extends Mysql {
             }
 
             resultSet = statement.executeQuery();
-            try {
-                while (resultSet.next()) {
-                    // todo ...
-
-                }
-            } catch (SQLException e) {
-                logger.error("resultSet error", e);
+            String[] selectFields = parseSelectFields(sql);
+            while (resultSet.next()) {
+                beanList.add(resultSet(selectFields,resultSet));
             }
-
         } catch (Exception e) {
             logger.error("sql error", e);
         } finally {

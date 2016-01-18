@@ -9,4 +9,4 @@ CREATE TABLE `user` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `register_ts` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;

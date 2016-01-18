@@ -4,6 +4,8 @@ import net.mengkang.demo.entity.UserLite;
 import net.mengkang.nettyrest.mysql.MySelect;
 import net.mengkang.nettyrest.mysql.Mysql;
 
+import java.util.List;
+
 public class UserDao {
 
     /**
@@ -21,12 +23,14 @@ public class UserDao {
 
     public void getOne(int id){
         String sql = "select id,name,icon from user where id=?";
-        MySelect mySelect = new MySelect<>(new UserLite());
+        MySelect mySelect = new MySelect<UserLite>(new UserLite());
         System.out.println(mySelect.get(sql, id).toString());
 
         String sql2 = "select id,name from user where id=?";
         System.out.println(mySelect.get(sql2, 2).toString());
 
+        String sql3 = "select id,name from user limit 10";
+        List<UserLite> userLiteList = mySelect.list(sql3);
     }
 
 }
