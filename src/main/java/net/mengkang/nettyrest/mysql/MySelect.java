@@ -49,36 +49,6 @@ public class MySelect<A> extends Mysql {
         return fields;
     }
 
-    public A get(String sql, Object... params) {
-
-        grammarCheck(sql, DMLTypes.SELECT);
-        int paramSize = getParameterNum(sql, params);
-
-        Connection        conn      = null;
-        PreparedStatement statement = null;
-        ResultSet         resultSet = null;
-
-        try {
-            conn = JdbcPool.getReadConnection();
-            statement = conn.prepareStatement(sql);
-
-            if (paramSize > 0) {
-                statement = bindParameters(statement, params);
-            }
-
-            resultSet = statement.executeQuery();
-            if (resultSet.next()){
-                String[] selectFields = parseSelectFields(sql);
-                return resultSet(selectFields,resultSet);
-            }
-        } catch (SQLException e) {
-            logger.error("sql error", e);
-        } finally {
-            JdbcPool.release(conn, statement, resultSet);
-        }
-        return null;
-    }
-
     public A resultSet(String[] selectFields,ResultSet resultSet){
 
         A bean = null;
@@ -110,9 +80,39 @@ public class MySelect<A> extends Mysql {
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException e) {
             e.printStackTrace();
         }
+
         return bean;
     }
 
+    public A get(String sql, Object... params) {
+
+        grammarCheck(sql, DMLTypes.SELECT);
+        int paramSize = getParameterNum(sql, params);
+
+        Connection        conn      = null;
+        PreparedStatement statement = null;
+        ResultSet         resultSet = null;
+
+        try {
+            conn = JdbcPool.getReadConnection();
+            statement = conn.prepareStatement(sql);
+
+            if (paramSize > 0) {
+                statement = bindParameters(statement, params);
+            }
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                String[] selectFields = parseSelectFields(sql);
+                return resultSet(selectFields,resultSet);
+            }
+        } catch (SQLException e) {
+            logger.error("sql error", e);
+        } finally {
+            JdbcPool.release(conn, statement, resultSet);
+        }
+        return null;
+    }
 
     public List<A> list(String sql, Object... params) {
         List<A> beanList = new ArrayList<>();
