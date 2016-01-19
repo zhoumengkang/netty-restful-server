@@ -1,7 +1,5 @@
 CREATE DATABASE `netty_rest`;
 
-DROP TABLE IF EXISTS `user`;
-
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) DEFAULT NULL,
