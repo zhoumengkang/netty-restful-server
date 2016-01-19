@@ -1,11 +1,13 @@
 package net.mengkang.demo.entity;
 
+import net.mengkang.demo.bo.Icon;
 import net.mengkang.nettyrest.BaseEntity;
 
 public class User extends BaseEntity {
-    private int id;
+    private int    id;
     private String name;
-    private int age;
+    private Icon   icon;
+    private int    age;
 
     public int getId() {
         return id;
@@ -21,6 +23,14 @@ public class User extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Icon icon) {
+        this.icon = icon;
     }
 
     public int getAge() {
