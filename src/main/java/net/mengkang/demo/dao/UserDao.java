@@ -30,8 +30,8 @@ public class UserDao {
     @SuppressWarnings("unchecked")
     public List<UserLite> list(){
         MySelect mySelect = new MySelect<>(new UserLite());
-        String sql3 = "select id,name,icon,birthday from user limit 10";
-        return mySelect.list(sql3);
+        String sql = "select id,name,icon,birthday from user limit 10";
+        return mySelect.list(sql);
     }
 
 }
