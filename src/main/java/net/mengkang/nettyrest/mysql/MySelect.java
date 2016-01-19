@@ -8,7 +8,6 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-
 public class MySelect<A> extends Mysql {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
