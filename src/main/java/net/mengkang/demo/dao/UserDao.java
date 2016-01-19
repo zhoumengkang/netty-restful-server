@@ -21,16 +21,17 @@ public class UserDao {
         return Mysql.getValue(sql, id);
     }
 
-    public void getOne(int id){
-        String sql = "select id,name,icon from user where id=?";
+    public UserLite get(int id){
         MySelect mySelect = new MySelect<>(new UserLite());
-        System.out.println(mySelect.get(sql, id).toString());
+        String sql = "select id,name,icon,birthday from user where id=?";
+        return (UserLite) mySelect.get(sql, id);
+    }
 
-        String sql2 = "select id,name from user where id=?";
-        System.out.println(mySelect.get(sql2, 2).toString());
-
-        String sql3 = "select id,name from user limit 10";
-        List<UserLite> userLiteList = mySelect.list(sql3);
+    @SuppressWarnings("unchecked")
+    public List<UserLite> list(){
+        MySelect mySelect = new MySelect<>(new UserLite());
+        String sql3 = "select id,name,icon,birthday from user limit 10";
+        return mySelect.list(sql3);
     }
 
 }

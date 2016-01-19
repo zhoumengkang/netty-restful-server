@@ -47,6 +47,13 @@ public class User extends BaseEntity {
         this.age = age;
     }
 
+    public User(int id, String name, Icon icon, int age) {
+        this.id = id;
+        this.name = name;
+        this.icon = icon;
+        this.age = age;
+    }
+
     public User() {
     }
 }

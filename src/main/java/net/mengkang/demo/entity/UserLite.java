@@ -7,9 +7,9 @@ public class UserLite {
     private int    id;
     private String name;
     private String icon;
-    private int   sex;
+    private int    sex;
     private int    birthday;
-    private int   status;
+    private int    status;
     @DbFiled("register_ts")
     private int    ts;
 
