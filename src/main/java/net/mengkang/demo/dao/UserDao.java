@@ -23,7 +23,7 @@ public class UserDao {
 
     public void getOne(int id){
         String sql = "select id,name,icon from user where id=?";
-        MySelect mySelect = new MySelect<UserLite>(new UserLite());
+        MySelect mySelect = new MySelect<>(new UserLite());
         System.out.println(mySelect.get(sql, id).toString());
 
         String sql2 = "select id,name from user where id=?";

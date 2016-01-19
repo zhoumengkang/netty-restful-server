@@ -49,6 +49,7 @@ public class MySelect<A> extends Mysql {
         return fields;
     }
 
+    @SuppressWarnings("unchecked")
     public A resultSet(String[] selectFields,ResultSet resultSet){
 
         A bean = null;
