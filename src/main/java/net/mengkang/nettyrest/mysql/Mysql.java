@@ -22,7 +22,7 @@ public class Mysql {
                 throw new Exception(dmlType + " statement needed");
             }
 
-            if(sql.toLowerCase().indexOf("where") < 1){
+            if(!dmlType.equals("insert") && sql.toLowerCase().indexOf("where") < 1){
                 throw new Exception("where statement needed");
             }
         } catch (Exception e) {
