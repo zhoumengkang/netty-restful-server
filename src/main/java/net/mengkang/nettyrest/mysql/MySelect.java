@@ -21,6 +21,13 @@ public class MySelect<A> extends Mysql {
         fieldMapInit();
     }
 
+    /**
+     * 数据库中的字段和bean属性值的映射
+     * {
+     *     数据库字段名               bean 属性名
+     *     create_time      :       createTime
+     * }
+     */
     private void fieldMapInit() {
         Field[] fields = clazz.getDeclaredFields();
 
@@ -33,7 +40,14 @@ public class MySelect<A> extends Mysql {
         }
     }
 
-    // todo select * xxx
+    // todo select *
+
+    /**
+     * 解析查询语句的字段 目前还不支持 * 查询 (也最好不要用)
+     *
+     * @param sql
+     * @return
+     */
     private String[] parseSelectFields(String sql) {
         sql = sql.toLowerCase();
 
@@ -48,6 +62,14 @@ public class MySelect<A> extends Mysql {
         return fields;
     }
 
+    /**
+     * 根据 fieldMap 里字段名和 bean 属性名的对应关系,根据查询字段取出对应的属性名
+     * 然后通过反射设置值
+     *
+     * @param selectFields
+     * @param resultSet
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public A resultSet(String[] selectFields,ResultSet resultSet){
 
