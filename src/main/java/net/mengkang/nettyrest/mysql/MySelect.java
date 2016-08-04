@@ -24,8 +24,8 @@ public class MySelect<A> extends Mysql {
     /**
      * 数据库中的字段和bean属性值的映射
      * {
-     *     数据库字段名               bean 属性名
-     *     create_time      :       createTime
+     * 数据库字段名               bean 属性名
+     * create_time      :       createTime
      * }
      */
     private void fieldMapInit() {
@@ -40,8 +40,6 @@ public class MySelect<A> extends Mysql {
         }
     }
 
-    // todo select *
-
     /**
      * 解析查询语句的字段 目前还不支持 * 查询 (也最好不要用)
      *
@@ -52,12 +50,24 @@ public class MySelect<A> extends Mysql {
         sql = sql.toLowerCase();
 
         String[] fieldArray = sql.substring(sql.indexOf("select") + 6, sql.indexOf("from")).split(",");
-        int      length     = fieldArray.length;
-        String[] fields     = new String[length];
+        int length = fieldArray.length;
+        String[] fields = new String[length];
 
         for (int i = 0; i < length; i++) {
             fields[i] = fieldArray[i].trim().replace("`", "");
         }
+
+//        try {
+//            if (fields.length == 0) {
+//                throw new Exception("no select fields");
+//            }
+//
+//            if (fields.length == 1 && fields[0].equals("*")) {
+//                throw new Exception("select * not supported");
+//            }
+//        } catch (Exception e) {
+//            logger.error(e.getMessage());
+//        }
 
         return fields;
     }
@@ -71,15 +81,20 @@ public class MySelect<A> extends Mysql {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public A resultSet(String[] selectFields,ResultSet resultSet){
+    public A resultSet(String[] selectFields, ResultSet resultSet) {
 
         A bean = null;
 
-        try{
+        try {
             bean = (A) Class.forName(clazz.getName()).newInstance();
 
             for (int i = 0; i < selectFields.length; i++) {
                 int j = i + 1;
+
+                if (!fieldMap.containsKey(selectFields[i])){
+                    continue;
+                }
+
                 Field field = fieldMap.get(selectFields[i]);
                 field.setAccessible(true);
                 Class fieldClass = field.getType();
@@ -97,7 +112,8 @@ public class MySelect<A> extends Mysql {
                     field.set(bean, resultSet.getDate(j));
                 }
             }
-        }catch (SQLException e){
+
+        } catch (SQLException e) {
             logger.error("resultSet parse error", e);
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException e) {
             e.printStackTrace();
@@ -111,9 +127,9 @@ public class MySelect<A> extends Mysql {
         grammarCheck(sql, DMLTypes.SELECT);
         int paramSize = getParameterNum(sql, params);
 
-        Connection        conn      = null;
+        Connection conn = null;
         PreparedStatement statement = null;
-        ResultSet         resultSet = null;
+        ResultSet resultSet = null;
 
         try {
             conn = JdbcPool.getReadConnection();
@@ -124,9 +140,9 @@ public class MySelect<A> extends Mysql {
             }
 
             resultSet = statement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 String[] selectFields = parseSelectFields(sql);
-                return resultSet(selectFields,resultSet);
+                return resultSet(selectFields, resultSet);
             }
         } catch (SQLException e) {
             logger.error("sql error", e);
@@ -142,9 +158,9 @@ public class MySelect<A> extends Mysql {
         grammarCheck(sql, DMLTypes.SELECT);
         int paramSize = getParameterNum(sql, params);
 
-        Connection        conn      = null;
+        Connection conn = null;
         PreparedStatement statement = null;
-        ResultSet         resultSet = null;
+        ResultSet resultSet = null;
         try {
             conn = JdbcPool.getReadConnection();
             statement = conn.prepareStatement(sql);
@@ -156,7 +172,7 @@ public class MySelect<A> extends Mysql {
             resultSet = statement.executeQuery();
             String[] selectFields = parseSelectFields(sql);
             while (resultSet.next()) {
-                beanList.add(resultSet(selectFields,resultSet));
+                beanList.add(resultSet(selectFields, resultSet));
             }
         } catch (Exception e) {
             logger.error("sql error", e);
