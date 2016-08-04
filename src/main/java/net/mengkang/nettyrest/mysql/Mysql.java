@@ -22,6 +22,7 @@ public class Mysql {
                 throw new Exception(dmlType + " statement needed");
             }
 
+            // 除了 insert 之外的操作, 删改查都必须带上条件
             if(!dmlType.equals("insert") && sql.toLowerCase().indexOf("where") < 1){
                 throw new Exception("where statement needed");
             }
@@ -32,6 +33,13 @@ public class Mysql {
 
     }
 
+    /**
+     * 检查预处理语句和参数个数是否相符 以免出现参数太多,少写 ? 的情况
+     *
+     * @param sql
+     * @param params
+     * @return
+     */
     protected static int getParameterNum(String sql, Object... params) {
         int paramSize = sql.length() - sql.replaceAll("\\?", "").length();
 
