@@ -245,4 +245,61 @@ public class Mysql {
 
         return res;
     }
+    /**
+     * 根据条件获得某类的集合，类中属性名必须和数据库字段名保持一致
+     * @param clazz
+     * @param sql
+     * @param params
+     * @return
+     */
+    public static <T> List<T>  getObject(Class<T> clazz,String sql,Object... params){
+        
+        int paramSize = getParameterNum(sql,params);
+        if (!sql.trim().toLowerCase().startsWith("select")) {
+            return null;
+        }
+
+        Connection        conn      = null;
+        PreparedStatement statement = null;
+        ResultSet         rs        = null;
+        //int               res       = 0;
+        
+        try {
+            conn = JdbcPool.getReadConnection();
+            statement = conn.prepareStatement(sql);
+
+            if (paramSize > 0) {
+                statement = bindParameters(statement, params);
+            }
+
+            rs = statement.executeQuery();
+            List<T> list = new ArrayList<>();
+            while (rs.next()) {
+                //实例化一个对象
+                T newInstance = clazz.newInstance();
+                Class<? extends Object> class1 = newInstance.getClass();
+                //暴力反射获得所有的属性
+                Field[] declaredFields = class1.getDeclaredFields();
+                for (Field field : declaredFields) {
+                    field.setAccessible(true);
+                    Class<?> declaringClass = field.getType();
+                    Object cast = declaringClass.cast(rs.getObject(field.getName()));
+                    field.set(newInstance, cast);
+                }
+                list.add(newInstance);
+            }
+            
+          return list;
+        } catch (SQLException e) {
+            logger.error("sql error",e);
+        } catch (InstantiationException e) {
+            logger.error("sql error",e);
+        } catch (IllegalAccessException e) {
+            logger.error("sql error",e);
+        } finally {
+            JdbcPool.release(conn, statement, rs);
+        }
+
+        return null;
+    }
 }
