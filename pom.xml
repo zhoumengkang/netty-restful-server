@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netty.version>5.0.0.Alpha2</netty.version>
         <slf4j.version>1.7.13</slf4j.version>
-        <logback.version>1.1.3</logback.version>
+        <logback.version>1.2.0</logback.version>
         <json.version>20141113</json.version>
         <junit.version>4.7</junit.version>
         <mysql.version>5.1.18</mysql.version>
